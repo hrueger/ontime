@@ -117,3 +117,13 @@
 .fullHeight {
   height: 100%
 }
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.rowColumn2 {
+  width: 50%;
+  padding-right: 1rem;
+}

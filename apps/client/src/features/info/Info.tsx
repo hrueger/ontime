@@ -9,20 +9,7 @@ import style from './Info.module.scss';
 
 export default function Info() {
   const data = useInfoPanel();
-
-  const titlesNow = {
-    title: data.titles.titleNow || '',
-    subtitle: data.titles.subtitleNow || '',
-    presenter: data.titles.presenterNow || '',
-    note: data.titles.noteNow || '',
-  };
-
-  const titlesNext = {
-    title: data.titles.titleNext || '',
-    subtitle: data.titles.subtitleNext || '',
-    presenter: data.titles.presenterNext || '',
-    note: data.titles.noteNext || '',
-  };
+  console.log(data);
 
   const selected = !data.numEvents
     ? 'No events'
@@ -39,10 +26,10 @@ export default function Info() {
         <InfoNif />
       </CollapsableInfo>
       <CollapsableInfo title='Playing Now'>
-        <InfoTitles data={titlesNow} />
+        <InfoTitles data={data.titles.eventNow} />
       </CollapsableInfo>
       <CollapsableInfo title='Playing Next'>
-        <InfoTitles data={titlesNext} />
+        <InfoTitles data={data.titles.eventNext} />
       </CollapsableInfo>
       <CollapsableInfo title='Log'>
         <InfoLogger />

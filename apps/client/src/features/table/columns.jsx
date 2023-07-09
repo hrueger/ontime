@@ -1,9 +1,9 @@
 import { FiCheck } from '@react-icons/all-files/fi/FiCheck';
+import { millisToString } from 'ontime-utils';
 
 import EditableCell from './tableElements/EditableCell';
 
 import style from './Table.module.scss';
-import { millisToString } from 'ontime-utils';
 
 /**
  * React - Table column object

@@ -206,24 +206,12 @@ export class EventLoader {
       numEvents: EventLoader.getPlayableEvents().length,
     };
     this.titles = {
-      titleNow: null,
-      subtitleNow: null,
-      presenterNow: null,
-      noteNow: null,
-      titleNext: null,
-      subtitleNext: null,
-      presenterNext: null,
-      noteNext: null,
+      eventNext: null,
+      eventNow: null,
     };
     this.titlesPublic = {
-      titleNow: null,
-      subtitleNow: null,
-      presenterNow: null,
-      noteNow: null,
-      titleNext: null,
-      subtitleNext: null,
-      presenterNext: null,
-      noteNext: null,
+      eventNext: null,
+      eventNow: null,
     };
 
     // workaround for socket not being ready in constructor
@@ -284,9 +272,7 @@ export class EventLoader {
       this._loadThisTitles(event, 'now-private');
 
       // assume there is no public event
-      this.titlesPublic.titleNow = null;
-      this.titlesPublic.subtitleNow = null;
-      this.titlesPublic.presenterNow = null;
+      this.titlesPublic.eventNow = null;
       this.loaded.selectedPublicEventId = null;
 
       // if there is nothing before, return
@@ -311,15 +297,10 @@ export class EventLoader {
     if (this.loaded.selectedEventIndex === null) return;
 
     // assume there is no next event
-    this.titles.titleNext = null;
-    this.titles.subtitleNext = null;
-    this.titles.presenterNext = null;
-    this.titles.noteNext = null;
+    this.titles.eventNext = null;
     this.loaded.nextEventId = null;
 
-    this.titlesPublic.titleNext = null;
-    this.titlesPublic.subtitleNext = null;
-    this.titlesPublic.presenterNext = null;
+    this.titlesPublic.eventNext = null;
     this.loaded.nextPublicEventId = null;
 
     const numEvents = rundown.length;
@@ -362,66 +343,42 @@ export class EventLoader {
       // now, load to both public and private
       case 'now':
         // public
-        this.titlesPublic.titleNow = event.title;
-        this.titlesPublic.subtitleNow = event.subtitle;
-        this.titlesPublic.presenterNow = event.presenter;
-        this.titlesPublic.noteNow = event.note;
+        this.titlesPublic.eventNow = event;
         this.loaded.selectedPublicEventId = event.id;
 
         // private
-        this.titles.titleNow = event.title;
-        this.titles.subtitleNow = event.subtitle;
-        this.titles.presenterNow = event.presenter;
-        this.titles.noteNow = event.note;
+        this.titles.eventNow = event;
         this.loaded.selectedEventId = event.id;
         break;
 
       case 'now-public':
-        this.titlesPublic.titleNow = event.title;
-        this.titlesPublic.subtitleNow = event.subtitle;
-        this.titlesPublic.presenterNow = event.presenter;
-        this.titlesPublic.noteNow = event.note;
+        this.titlesPublic.eventNow = event;
         this.loaded.selectedPublicEventId = event.id;
         break;
 
       case 'now-private':
-        this.titles.titleNow = event.title;
-        this.titles.subtitleNow = event.subtitle;
-        this.titles.presenterNow = event.presenter;
-        this.titles.noteNow = event.note;
+        this.titles.eventNow = event;
         this.loaded.selectedEventId = event.id;
         break;
 
       // next, load to both public and private
       case 'next':
         // public
-        this.titlesPublic.titleNext = event.title;
-        this.titlesPublic.subtitleNext = event.subtitle;
-        this.titlesPublic.presenterNext = event.presenter;
-        this.titlesPublic.noteNext = event.note;
+        this.titlesPublic.eventNext = event;
         this.loaded.nextPublicEventId = event.id;
 
         // private
-        this.titles.titleNext = event.title;
-        this.titles.subtitleNext = event.subtitle;
-        this.titles.presenterNext = event.presenter;
-        this.titles.noteNext = event.note;
+        this.titles.eventNext = event;
         this.loaded.nextEventId = event.id;
         break;
 
       case 'next-public':
-        this.titlesPublic.titleNext = event.title;
-        this.titlesPublic.subtitleNext = event.subtitle;
-        this.titlesPublic.presenterNext = event.presenter;
-        this.titlesPublic.noteNext = event.note;
+        this.titlesPublic.eventNext = event;
         this.loaded.nextPublicEventId = event.id;
         break;
 
       case 'next-private':
-        this.titles.titleNext = event.title;
-        this.titles.subtitleNext = event.subtitle;
-        this.titles.presenterNext = event.presenter;
-        this.titles.noteNext = event.note;
+        this.titles.eventNext = event;
         this.loaded.nextEventId = event.id;
         break;
 

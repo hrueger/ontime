@@ -85,7 +85,7 @@ export const useCuesheet = () => {
     selectedEventId: state.loaded.selectedEventId,
     selectedEventIndex: state.loaded.selectedEventIndex,
     numEvents: state.loaded.numEvents,
-    titleNow: state.titles.titleNow,
+    titleNow: state.titles.eventNow?.title,
   });
 
   return useRuntimeStore(featureSelector, deepCompare);

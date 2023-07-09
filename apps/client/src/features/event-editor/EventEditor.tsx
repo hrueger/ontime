@@ -67,6 +67,7 @@ export default function EventEditor() {
         subtitle={event.subtitle}
         note={event.note}
         colour={event.colour}
+        event={event}
       />
     </div>
   );

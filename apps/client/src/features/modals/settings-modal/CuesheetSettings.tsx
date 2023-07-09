@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { Alert, AlertDescription, AlertIcon, AlertTitle, Input } from '@chakra-ui/react';
+import { Alert, AlertDescription, AlertIcon, AlertTitle, Input, Switch } from '@chakra-ui/react';
 import { UserFields } from 'ontime-types';
 
 import { postUserFields } from '../../../common/api/ontimeApi';
@@ -72,106 +72,35 @@ export default function CuesheetSettings() {
         </div>
       </Alert>
       <div style={{ height: '16px' }} />
-      <ModalSplitInput field='user0' title='User0' description='' error={errors.user0?.message}>
-        <Input
-          {...inputProps}
-          width='300px'
-          variant='ontime-filled-on-light'
-          isDisabled={disableInputs}
-          placeholder='Display name for user field'
-          {...register('user0')}
-        />
-      </ModalSplitInput>
-      <ModalSplitInput field='user1' title='User1' description='' error={errors.user1?.message}>
-        <Input
-          {...inputProps}
-          width='300px'
-          variant='ontime-filled-on-light'
-          isDisabled={disableInputs}
-          placeholder='Display name for user field'
-          {...register('user1')}
-        />
-      </ModalSplitInput>
-      <ModalSplitInput field='user2' title='User2' description='' error={errors.user2?.message}>
-        <Input
-          {...inputProps}
-          width='300px'
-          variant='ontime-filled-on-light'
-          isDisabled={disableInputs}
-          placeholder='Display name for user field'
-          {...register('user2')}
-        />
-      </ModalSplitInput>
-      <ModalSplitInput field='user3' title='User3' description='' error={errors.user3?.message}>
-        <Input
-          {...inputProps}
-          width='300px'
-          variant='ontime-filled-on-light'
-          isDisabled={disableInputs}
-          placeholder='Display name for user field'
-          {...register('user3')}
-        />
-      </ModalSplitInput>
-      <ModalSplitInput field='user4' title='User4' description='' error={errors.user4?.message}>
-        <Input
-          {...inputProps}
-          width='300px'
-          variant='ontime-filled-on-light'
-          isDisabled={disableInputs}
-          placeholder='Display name for user field'
-          {...register('user4')}
-        />
-      </ModalSplitInput>
-      <ModalSplitInput field='user5' title='User5' description='' error={errors.user5?.message}>
-        <Input
-          {...inputProps}
-          width='300px'
-          variant='ontime-filled-on-light'
-          isDisabled={disableInputs}
-          placeholder='Display name for user field'
-          {...register('user5')}
-        />
-      </ModalSplitInput>
-      <ModalSplitInput field='user6' title='User6' description='' error={errors.user6?.message}>
-        <Input
-          {...inputProps}
-          width='300px'
-          variant='ontime-filled-on-light'
-          isDisabled={disableInputs}
-          placeholder='Display name for user field'
-          {...register('user6')}
-        />
-      </ModalSplitInput>
-      <ModalSplitInput field='user7' title='User7' description='' error={errors.user7?.message}>
-        <Input
-          {...inputProps}
-          width='300px'
-          variant='ontime-filled-on-light'
-          isDisabled={disableInputs}
-          placeholder='Display name for user field'
-          {...register('user7')}
-        />
-      </ModalSplitInput>
-      <ModalSplitInput field='user8' title='User8' description='' error={errors.user8?.message}>
-        <Input
-          {...inputProps}
-          width='300px'
-          variant='ontime-filled-on-light'
-          isDisabled={disableInputs}
-          placeholder='Display name for user field'
-          {...register('user8')}
-        />
-      </ModalSplitInput>
-      <ModalSplitInput field='user9' title='User9' description='' error={errors.user9?.message}>
-        <Input
-          {...inputProps}
-          width='300px'
-          variant='ontime-filled-on-light'
-          isDisabled={disableInputs}
-          placeholder='Display name for user field'
-          {...register('user9')}
-        />
-      </ModalSplitInput>
+      {Array(10)
+        .fill(null)
+        .map((_, index) => {
+          return (
+            <ModalSplitInput
+              field={`user${index}` as const}
+              title={`User ${index}`}
+              description=''
+              error={errors[`user${index}` as keyof UserFields]?.message}
+              key={index}
+            >
+              <Switch
+                {...register(`user${index}Enabled` as keyof UserFields)}
+                isDisabled={disableInputs}
+                size='lg'
+                defaultChecked={data?.[`user${index}Enabled` as keyof UserFields] as boolean}
+              />
+              <Input
+                {...inputProps}
+                width='300px'
+                variant='ontime-filled-on-light'
+                isDisabled={disableInputs}
+                placeholder='Display name for user field'
+                {...register(`user${index}` as keyof UserFields)}
+              />
+            </ModalSplitInput>
+          );
+        })}
+
       <OntimeModalFooter
         formId='cuesheet-settings'
         handleRevert={onReset}
