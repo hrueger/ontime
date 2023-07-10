@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CI: ''
+      NODE_ENV: 'local' # To disable sentry
 
     steps:
     - uses: actions/checkout@v3

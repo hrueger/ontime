@@ -4,6 +4,9 @@ on:
   push:
   workflow_dispatch:
 
+env:
+  NODE_ENV: 'local' # To disable sentry
+
 jobs:
   build_macos:
     runs-on: macOS-latest
