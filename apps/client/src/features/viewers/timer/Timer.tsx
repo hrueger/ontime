@@ -6,9 +6,13 @@ import { overrideStylesURL } from '../../../common/api/apiConstants';
 import MultiPartProgressBar from '../../../common/components/multi-part-progress-bar/MultiPartProgressBar';
 import NavigationMenu from '../../../common/components/navigation-menu/NavigationMenu';
 import TitleCard from '../../../common/components/title-card/TitleCard';
-import { TIMER_OPTIONS } from '../../../common/components/view-params-editor/constants';
+import {
+  getNotesOrUserFieldsFieldOption,
+  TIMER_OPTIONS,
+} from '../../../common/components/view-params-editor/constants';
 import ViewParamsEditor from '../../../common/components/view-params-editor/ViewParamsEditor';
 import { useRuntimeStylesheet } from '../../../common/hooks/useRuntimeStylesheet';
+import useUserFields from '../../../common/hooks-query/useUserFields';
 import { TimeManagerType } from '../../../common/models/TimeManager.type';
 import { formatTime } from '../../../common/utils/time';
 import { useTranslation } from '../../../translation/TranslationProvider';
@@ -51,6 +55,7 @@ export default function Timer(props: TimerProps) {
   const { isMirrored, pres, title, time, viewSettings } = props;
   const { shouldRender } = useRuntimeStylesheet(viewSettings?.overrideStyles && overrideStylesURL);
   const { getLocalizedString } = useTranslation();
+  const { data: userFields } = useUserFields();
 
   useEffect(() => {
     document.title = 'ontime - Timer';
@@ -100,7 +105,7 @@ export default function Timer(props: TimerProps) {
   return (
     <div className={showFinished ? `${baseClasses} stage-timer--finished` : baseClasses} data-testid='timer-view'>
       <NavigationMenu />
-      <ViewParamsEditor paramFields={TIMER_OPTIONS} />
+      <ViewParamsEditor paramFields={[...TIMER_OPTIONS, getNotesOrUserFieldsFieldOption(userFields)]} />
       <div className={showOverlay ? 'message-overlay message-overlay--active' : 'message-overlay'}>
         <div className={`message ${showBlinking ? 'blink' : ''}`}>{pres.text}</div>
       </div>
@@ -148,7 +153,7 @@ export default function Timer(props: TimerProps) {
             animate='visible'
             exit='exit'
           >
-            <TitleCard label='now' title={title.titleNow} subtitle={title.subtitleNow} presenter={title.presenterNow} />
+            <TitleCard label='now' event={title.eventNow} />
           </motion.div>
         )}
       </AnimatePresence>
@@ -163,12 +168,7 @@ export default function Timer(props: TimerProps) {
             animate='visible'
             exit='exit'
           >
-            <TitleCard
-              label='next'
-              title={title.titleNext}
-              subtitle={title.subtitleNext}
-              presenter={title.presenterNext}
-            />
+            <TitleCard label='next' event={title.eventNext} />
           </motion.div>
         )}
       </AnimatePresence>

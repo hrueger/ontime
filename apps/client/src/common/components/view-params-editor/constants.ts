@@ -1,3 +1,5 @@
+import { UserFields } from 'ontime-types';
+
 import { ParamField } from './types';
 
 export const TIME_FORMAT_OPTION: ParamField = {
@@ -5,7 +7,7 @@ export const TIME_FORMAT_OPTION: ParamField = {
   title: '12  / 24 hour timer',
   description: 'Whether to show the time in 12 or 24 hour mode. Overrides the global setting from preferences',
   type: 'option',
-  values: ['12', '24'],
+  values: { '12': '12 hours', '24': '24 hours' },
 };
 
 export const CLOCK_OPTIONS: ParamField[] = [
@@ -45,7 +47,7 @@ export const CLOCK_OPTIONS: ParamField[] = [
     title: 'Align Horizontal',
     description: 'Moves the horizontally in page to start = left | center | end = right',
     type: 'option',
-    values: ['start', 'center', 'end'],
+    values: { start: 'start', center: 'center', end: 'end' },
   },
   {
     id: 'offsetx',
@@ -58,7 +60,7 @@ export const CLOCK_OPTIONS: ParamField[] = [
     title: 'Align Vertical',
     description: 'Moves the vertically in page to start = left | center | end = right',
     type: 'option',
-    values: ['start', 'center', 'end'],
+    values: { start: 'start', center: 'center', end: 'end' },
   },
   {
     id: 'offsety',
@@ -67,6 +69,23 @@ export const CLOCK_OPTIONS: ParamField[] = [
     type: 'number',
   },
 ];
+
+export function getNotesOrUserFieldsFieldOption(userFields: UserFields | undefined): ParamField {
+  return {
+    id: 'showField',
+    description: 'What to show next to the subtitle',
+    title: 'Show Field',
+    type: 'option',
+    values: {
+      note: 'Notes',
+      ...Object.fromEntries(
+        Object.entries(userFields ?? {})
+          .filter(([key]) => !key.endsWith('Enabled') && ((userFields as any) || [])[`${key}Enabled`])
+          .map(([key, value]) => [key, value as string]),
+      ),
+    },
+  };
+}
 
 export const TIMER_OPTIONS: ParamField[] = [TIME_FORMAT_OPTION];
 
@@ -106,7 +125,7 @@ export const MINIMAL_TIMER_OPTIONS: ParamField[] = [
     title: 'Align Horizontal',
     description: 'Moves the horizontally in page to start = left | center | end = right',
     type: 'option',
-    values: ['start', 'center', 'end'],
+    values: { start: 'start', center: 'center', end: 'end' },
   },
   {
     id: 'offsetx',
@@ -119,7 +138,7 @@ export const MINIMAL_TIMER_OPTIONS: ParamField[] = [
     title: 'Align Vertical',
     description: 'Moves the vertically in page to start = left | center | end = right',
     type: 'option',
-    values: ['start', 'center', 'end'],
+    values: { start: 'start', center: 'center', end: 'end' },
   },
   {
     id: 'offsety',

@@ -1,28 +1,35 @@
+import { useSearchParams } from 'react-router-dom';
+import { OntimeEvent } from 'ontime-types';
+
 import { useTranslation } from '../../../translation/TranslationProvider';
 
 import './TitleCard.scss';
 
 interface TitleCardProps {
   label: 'now' | 'next';
-  title: string | null;
-  subtitle: string | null;
-  presenter: string | null;
+  event: OntimeEvent | null;
 }
 
 export default function TitleCard(props: TitleCardProps) {
-  const { label, title, subtitle, presenter } = props;
+  const { label, event } = props;
   const { getLocalizedString } = useTranslation();
 
   const accent = label === 'now';
+  const [searchParams] = useSearchParams();
 
   return (
     <div className='title-card'>
       <div className='inline'>
-        <span className='presenter'>{presenter}</span>
-        <span className={accent ? 'label accent' : 'label'}>{getLocalizedString(`common.${label}`)}</span>
+        <span className='presenter'>{event?.presenter}</span>
       </div>
-      <div className='title'>{title}</div>
-      <div className='subtitle'>{subtitle}</div>
+      <span className={accent ? 'label accent' : 'label'}>{getLocalizedString(`common.${label}`)}</span>
+      <div className='title'>{event?.title}</div>
+      <div className='subtitle'>
+        {event?.subtitle}
+        {searchParams.get('showField') && event?.[searchParams.get('showField')! as keyof OntimeEvent]
+          ? ` - ${event?.[searchParams.get('showField')! as keyof OntimeEvent]}`
+          : ''}
+      </div>
     </div>
   );
 }

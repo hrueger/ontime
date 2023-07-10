@@ -9,9 +9,13 @@ import Schedule from '../../../common/components/schedule/Schedule';
 import { ScheduleProvider } from '../../../common/components/schedule/ScheduleContext';
 import ScheduleNav from '../../../common/components/schedule/ScheduleNav';
 import TitleCard from '../../../common/components/title-card/TitleCard';
-import { TIME_FORMAT_OPTION } from '../../../common/components/view-params-editor/constants';
+import {
+  getNotesOrUserFieldsFieldOption,
+  TIME_FORMAT_OPTION,
+} from '../../../common/components/view-params-editor/constants';
 import ViewParamsEditor from '../../../common/components/view-params-editor/ViewParamsEditor';
 import { useRuntimeStylesheet } from '../../../common/hooks/useRuntimeStylesheet';
+import useUserFields from '../../../common/hooks-query/useUserFields';
 import { TimeManagerType } from '../../../common/models/TimeManager.type';
 import { formatTime } from '../../../common/utils/time';
 import { useTranslation } from '../../../translation/TranslationProvider';
@@ -40,6 +44,7 @@ export default function Public(props: BackstageProps) {
   const { isMirrored, publ, publicTitle, time, events, publicSelectedId, general, viewSettings } = props;
   const { shouldRender } = useRuntimeStylesheet(viewSettings?.overrideStyles && overrideStylesURL);
   const { getLocalizedString } = useTranslation();
+  const { data: userFields } = useUserFields();
 
   useEffect(() => {
     document.title = 'ontime - Public Screen';
@@ -57,7 +62,7 @@ export default function Public(props: BackstageProps) {
   return (
     <div className={`public-screen ${isMirrored ? 'mirror' : ''}`} data-testid='public-view'>
       <NavigationMenu />
-      <ViewParamsEditor paramFields={[TIME_FORMAT_OPTION]} />
+      <ViewParamsEditor paramFields={[TIME_FORMAT_OPTION, getNotesOrUserFieldsFieldOption(userFields)]} />
       <div className='event-header'>
         {general.title}
         <div className='clock-container'>
@@ -77,12 +82,7 @@ export default function Public(props: BackstageProps) {
               animate='visible'
               exit='exit'
             >
-              <TitleCard
-                label='now'
-                title={publicTitle.titleNow}
-                subtitle={publicTitle.subtitleNow}
-                presenter={publicTitle.presenterNow}
-              />
+              <TitleCard label='now' event={publicTitle.eventNow} />
             </motion.div>
           )}
         </AnimatePresence>
@@ -97,12 +97,7 @@ export default function Public(props: BackstageProps) {
               animate='visible'
               exit='exit'
             >
-              <TitleCard
-                label='next'
-                title={publicTitle.titleNext}
-                subtitle={publicTitle.subtitleNext}
-                presenter={publicTitle.presenterNext}
-              />
+              <TitleCard label='next' event={publicTitle.eventNext} />
             </motion.div>
           )}
         </AnimatePresence>

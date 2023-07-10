@@ -1,6 +1,7 @@
 import { memo, useEffect, useState } from 'react';
 import isEqual from 'react-fast-compare';
 import { useSearchParams } from 'react-router-dom';
+import { deepCompare } from 'common/stores/runtime';
 import { Message, ViewSettings } from 'ontime-types';
 
 import { overrideStylesURL } from '../../../common/api/apiConstants';
@@ -33,14 +34,8 @@ const Lower = (props: LowerProps) => {
   const { shouldRender } = useRuntimeStylesheet(viewSettings?.overrideStyles && overrideStylesURL);
   const [searchParams] = useSearchParams();
   const [titles, setTitles] = useState<TitleManager>({
-    titleNow: '',
-    titleNext: '',
-    subtitleNow: '',
-    subtitleNext: '',
-    presenterNow: '',
-    presenterNext: '',
-    noteNow: '',
-    noteNext: '',
+    eventNext: null,
+    eventNow: null,
     showNow: false,
     showNext: false,
   });
@@ -55,11 +50,7 @@ const Lower = (props: LowerProps) => {
     // clear titles if necessary
     // will trigger an animation out in the component
     let timeout: NodeJS.Timeout | null = null;
-    if (
-      title?.titleNow !== titles?.titleNow ||
-      title?.subtitleNow !== titles?.subtitleNow ||
-      title?.presenterNow !== titles?.presenterNow
-    ) {
+    if (!deepCompare(title.eventNow, titles.eventNow)) {
       setTitles((t) => ({ ...t, showNow: false }));
 
       const transitionTime = 2000;
@@ -75,7 +66,7 @@ const Lower = (props: LowerProps) => {
       }
     };
     // eslint-disable-next-line -- we do this to keep animations
-  }, [title.titleNow, title.subtitleNow, title.presenterNow]);
+  }, [title.eventNow]);
 
   // defer rendering until we load stylesheets
   if (!shouldRender) {

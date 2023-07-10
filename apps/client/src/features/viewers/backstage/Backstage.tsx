@@ -11,9 +11,13 @@ import Schedule from '../../../common/components/schedule/Schedule';
 import { ScheduleProvider } from '../../../common/components/schedule/ScheduleContext';
 import ScheduleNav from '../../../common/components/schedule/ScheduleNav';
 import TitleCard from '../../../common/components/title-card/TitleCard';
-import { TIME_FORMAT_OPTION } from '../../../common/components/view-params-editor/constants';
+import {
+  getNotesOrUserFieldsFieldOption,
+  TIME_FORMAT_OPTION,
+} from '../../../common/components/view-params-editor/constants';
 import ViewParamsEditor from '../../../common/components/view-params-editor/ViewParamsEditor';
 import { useRuntimeStylesheet } from '../../../common/hooks/useRuntimeStylesheet';
+import useUserFields from '../../../common/hooks-query/useUserFields';
 import { TimeManagerType } from '../../../common/models/TimeManager.type';
 import { getEventsWithDelay } from '../../../common/utils/eventsManager';
 import { formatTime } from '../../../common/utils/time';
@@ -43,6 +47,7 @@ export default function Backstage(props: BackstageProps) {
   const { isMirrored, publ, title, time, backstageEvents, selectedId, general, viewSettings } = props;
   const { shouldRender } = useRuntimeStylesheet(viewSettings?.overrideStyles && overrideStylesURL);
   const { getLocalizedString } = useTranslation();
+  const { data: userFields } = useUserFields();
 
   // Set window title
   useEffect(() => {
@@ -81,7 +86,7 @@ export default function Backstage(props: BackstageProps) {
   return (
     <div className={`backstage ${isMirrored ? 'mirror' : ''}`} data-testid='backstage-view'>
       <NavigationMenu />
-      <ViewParamsEditor paramFields={[TIME_FORMAT_OPTION]} />
+      <ViewParamsEditor paramFields={[TIME_FORMAT_OPTION, getNotesOrUserFieldsFieldOption(userFields)]} />
       <div className='event-header'>
         {general.title}
         <div className='clock-container'>
@@ -108,12 +113,7 @@ export default function Backstage(props: BackstageProps) {
               animate='visible'
               exit='exit'
             >
-              <TitleCard
-                label='now'
-                title={title.titleNow}
-                subtitle={title.subtitleNow}
-                presenter={title.presenterNow}
-              />
+              <TitleCard label='now' event={title.eventNow} />
               <div className='timer-group'>
                 <div className='aux-timers'>
                   <div className='aux-timers__label'>{getLocalizedString('common.started_at')}</div>
@@ -142,12 +142,7 @@ export default function Backstage(props: BackstageProps) {
               animate='visible'
               exit='exit'
             >
-              <TitleCard
-                label='next'
-                title={title.titleNext}
-                subtitle={title.subtitleNext}
-                presenter={title.presenterNext}
-              />
+              <TitleCard label='next' event={title.eventNext} />
             </motion.div>
           )}
         </AnimatePresence>

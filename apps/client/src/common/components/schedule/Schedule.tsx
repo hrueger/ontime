@@ -30,18 +30,7 @@ export default function Schedule({ className }: ScheduleProps) {
             selectedState = 'future';
           }
         }
-        return (
-          <ScheduleItem
-            key={event.id}
-            selected={selectedState}
-            timeStart={event.timeStart}
-            timeEnd={event.timeEnd}
-            title={event.title}
-            colour={isBackstage ? event.colour : ''}
-            backstageEvent={!event.isPublic}
-            skip={event.skip}
-          />
-        );
+        return <ScheduleItem key={event.id} selected={selectedState} backstageEvent={!event.isPublic} event={event} />;
       })}
     </ul>
   );

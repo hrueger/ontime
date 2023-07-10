@@ -1,45 +1,40 @@
+import { useSearchParams } from 'react-router-dom';
+import { OntimeEvent } from 'ontime-types';
+
 import { formatTime } from '../../utils/time';
 
 import './Schedule.scss';
 
 interface ScheduleItemProps {
   selected: 'past' | 'now' | 'future';
-  timeStart: number;
-  timeEnd: number;
-  title: string;
-  presenter?: string;
   backstageEvent: boolean;
-  colour: string;
-  skip: boolean;
+  event: OntimeEvent;
 }
 
 export default function ScheduleItem(props: ScheduleItemProps) {
-  const {
-    selected,
-    timeStart,
-    timeEnd,
-    title,
-    presenter,
-    backstageEvent,
-    colour,
-    skip,
-  } = props;
+  const { selected, backstageEvent, event } = props;
+  const [searchParams] = useSearchParams();
 
-  const start = formatTime(timeStart, { format: 'hh:mm' });
-  const end = formatTime(timeEnd, { format: 'hh:mm' });
-  const userColour = colour !== '' ? colour : '';
+  const start = formatTime(event.timeStart, { format: 'hh:mm' });
+  const end = formatTime(event.timeEnd, { format: 'hh:mm' });
+  const userColour = event.colour !== '' ? event.colour : '';
   const selectStyle = `entry--${selected}`;
 
   return (
-    <li className={`entry ${selectStyle} ${skip ? 'skip' : ''}`}>
-      <div className='entry-times'>
+    <li className={`entry ${selectStyle} ${event.skip ? 'skip' : ''}`}>
+      <div className='entry-title'>
         <span className='entry-colour' style={{ backgroundColor: userColour }} />
-        {`${start} → ${end} ${backstageEvent ? '*' : ''}`}
+        {event.presenter && ` ${event.presenter} -`} {event.title}
+        <small className='color-fg-muted asterisk'>{backstageEvent ? ' *' : ''}</small>
       </div>
-      <div className='entry-title'>{title}</div>
-      {presenter && (
-        <div className='entry-presenter'>{presenter}</div>
-      )}
+      <div className='entry-times'>
+        {event.subtitle} | {`${start} → ${end}`}
+        <small>
+          {searchParams.get('showField') && event?.[searchParams.get('showField')! as keyof OntimeEvent]
+            ? ` - ${event?.[searchParams.get('showField')! as keyof OntimeEvent]}`
+            : ''}
+        </small>
+      </div>
     </li>
   );
 }

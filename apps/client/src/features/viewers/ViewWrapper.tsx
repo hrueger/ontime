@@ -42,11 +42,11 @@ const withData = <P extends object>(Component: ComponentType<P>) => {
     /********************************************/
     // is there a now field?
     let showNow = true;
-    if (!titles.titleNow && !titles.subtitleNow && !titles.presenterNow) showNow = false;
+    if (!titles.eventNow) showNow = false;
 
     // is there a next field?
     let showNext = true;
-    if (!titles.titleNext && !titles.subtitleNext && !titles.presenterNext) showNext = false;
+    if (!titles.eventNext) showNext = false;
 
     const titleManager: TitleManager = { ...titles, showNow: showNow, showNext: showNext };
 
@@ -57,11 +57,11 @@ const withData = <P extends object>(Component: ComponentType<P>) => {
     /********************************************/
     // is there a now field?
     let showPublicNow = true;
-    if (!titlesPublic.titleNow && !titlesPublic.subtitleNow && !titlesPublic.presenterNow) showPublicNow = false;
+    if (!titlesPublic.eventNow) showPublicNow = false;
 
     // is there a next field?
     let showPublicNext = true;
-    if (!titlesPublic.titleNext && !titlesPublic.subtitleNext && !titlesPublic.presenterNext) showPublicNext = false;
+    if (!titlesPublic.eventNext) showPublicNext = false;
 
     const publicTitleManager: TitleManager = {
       ...titlesPublic,
