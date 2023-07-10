@@ -1,8 +1,7 @@
 name: Ontime test v2
 
 on:
-  pull_request:
-    branches: '*'
+  push:
   workflow_dispatch:
 
 jobs:

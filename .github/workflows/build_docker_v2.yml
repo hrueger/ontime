@@ -2,7 +2,6 @@ name: Docker Image CI Ontime V2
 
 on:
   push:
-    tags: [ "*" ]
   workflow_dispatch:
 
 jobs:
