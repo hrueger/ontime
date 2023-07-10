@@ -15,4 +15,5 @@ export const langDe: TranslationObject = {
   'countdown.select_event': 'Wählen Sie eine Veranstaltung aus, um sie zu verfolgen',
   'countdown.to_start': 'Zeit bis zum Start',
   'countdown.waiting': 'Warten auf den Veranstaltungsbeginn',
+  'countdown.overtime': 'überfällig',
 };
