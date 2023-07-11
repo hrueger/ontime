@@ -38,6 +38,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: './apps/electron/dist/ontime-macOS.dmg'
+          tag_name: develop
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
