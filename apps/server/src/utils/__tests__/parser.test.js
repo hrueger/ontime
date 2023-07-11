@@ -768,15 +768,25 @@ describe('test userFields import', () => {
   it('imports a fully defined user fields', () => {
     const testUserFields = {
       user0: 'test0',
+      user0Enabled: false,
       user1: 'test1',
+      user1Enabled: false,
       user2: 'test2',
+      user2Enabled: false,
       user3: 'test3',
+      user3Enabled: false,
       user4: 'test4',
+      user4Enabled: false,
       user5: 'test5',
+      user5Enabled: false,
       user6: 'test6',
+      user6Enabled: false,
       user7: 'test7',
+      user7Enabled: false,
       user8: 'test8',
+      user8Enabled: false,
       user9: 'test9',
+      user9Enabled: false,
     };
 
     const testData = {
