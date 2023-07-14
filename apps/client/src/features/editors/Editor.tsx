@@ -14,6 +14,7 @@ const TimerControl = lazy(() => import('../control/playback/TimerControlExport')
 const MessageControl = lazy(() => import('../control/message/MessageControlExport'));
 const Info = lazy(() => import('../info/InfoExport'));
 const EventEditor = lazy(() => import('../event-editor/EventEditorExport'));
+const Timeline = lazy(() => import('../timeline/TimelineExport'));
 
 const IntegrationModal = lazy(() => import('../modals/integration-modal/IntegrationModal'));
 const SettingsModal = lazy(() => import('../modals/settings-modal/SettingsModal'));
@@ -65,6 +66,7 @@ export default function Editor() {
         <MessageControl />
         <TimerControl />
         <Info />
+        <Timeline />
       </div>
       <EventEditor />
     </>

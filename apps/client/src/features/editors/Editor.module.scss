@@ -38,13 +38,16 @@ $playback-width: 26rem;
   grid-template-columns: $menu-width $rundown-width $playback-width auto;
   grid-template-areas:
     'sett rundown play info'
-    'sett rundown mess info';
+    'sett rundown mess info'
+    'sett timeline timeline timeline'
+    ;
   gap: 0.5rem;
 
   .rundown,
   .playback,
   .messages,
   .info,
+  .timeline,
   .settings {
     position: relative;
 
@@ -131,6 +134,7 @@ $playback-width: 26rem;
   .rundown,
   .messages,
   .playback,
+  .timeline,
   .info {
     border-radius: 8px;
     height: 100%;
@@ -196,6 +200,12 @@ $playback-width: 26rem;
 .messages {
   grid-area: mess;
   min-width: 24rem;
+}
+
+.timeline {
+  grid-area: timeline;
+  min-height: 13rem;
+
 }
 
 .playback {

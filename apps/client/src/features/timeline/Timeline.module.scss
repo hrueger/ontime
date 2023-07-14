@@ -1,0 +1,60 @@
+@use '../../theme/mixins' as *;
+@use '../../theme/v2Styles' as *;
+
+$track-height: 8rem;
+
+.timelineContainer {
+  color: $secondary-text-gray;
+  margin-left: $element-inner-spacing;
+  font-size: $text-body-size;
+  overflow-x: scroll;
+}
+.track {
+  margin-bottom: 0.2rem;
+  background-color: rgb(56, 56, 56);
+  padding-right: 0.5rem;
+  border-radius: 0.5rem;
+  width: calc(var(--track-width, 100%) * 1.2);
+  .trackBody {
+    position: relative;
+    height: var(--track-height, $track-height);
+    .eventContainer {
+      position: absolute;
+      height: calc(var(--track-height, $track-height) - 0.4rem);
+      padding: 1px;
+      margin: 0.2rem;
+      .event {
+        border: 1px solid gray;
+        color: black;
+        height: 100%;
+        overflow: hidden;
+        border-radius: 0.5rem;
+      }
+    }
+  }
+}
+.trackHeader {
+  position: relative;
+  height: 3rem;
+}
+.trackHeaderItem {
+  &:last-child {
+    text-align: right;
+    transform: translateX(50%);
+  }
+  &:first-child {
+    text-align: left;
+    transform: translateX(0);
+  }
+  transform: translateX(-50%);
+  text-align: center;
+  position: absolute;
+  z-index: 10;
+}
+
+.timelineControls {
+  color: $secondary-text-gray;
+  * {
+    margin-right: 0.5rem;
+  }
+}

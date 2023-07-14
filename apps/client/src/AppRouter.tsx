@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect } from 'react';
 import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 
 import useAliases from './common/hooks-query/useAliases';
+import Timeline from './features/timeline/Timeline';
 import withData from './features/viewers/ViewWrapper';
 
 const Editor = lazy(() => import('./features/editors/ProtectedEditor'));
@@ -110,6 +111,14 @@ export default function AppRouter() {
           element={
             <EditorFeatureWrapper>
               <Info />
+            </EditorFeatureWrapper>
+          }
+        />
+        <Route
+          path='/timeline'
+          element={
+            <EditorFeatureWrapper>
+              <Timeline />
             </EditorFeatureWrapper>
           }
         />
