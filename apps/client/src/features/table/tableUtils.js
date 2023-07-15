@@ -15,9 +15,6 @@ export const parseField = (field, data) => {
     case 'timeEnd':
       val = millisToString(data);
       break;
-    case 'isPublic':
-      val = data ? 'x' : '';
-      break;
     default:
       val = data;
       break;
@@ -50,7 +47,7 @@ export const makeTable = (headerData, tableData, userFields) => {
     'title',
     'presenter',
     'subtitle',
-    'isPublic',
+    'department',
     'notes',
     'colour',
     'user0',

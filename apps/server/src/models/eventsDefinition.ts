@@ -10,7 +10,7 @@ export const event: Omit<OntimeEvent, 'id'> = {
   timeStart: 0,
   timeEnd: 0,
   duration: 0,
-  isPublic: false,
+  department: '',
   skip: false,
   colour: '',
   user0: '',

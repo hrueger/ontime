@@ -1,5 +1,6 @@
-import { Switch } from '@chakra-ui/react';
+import { Select, Switch } from '@chakra-ui/react';
 
+import useDepartments from '../../../common/hooks-query/useDepartments';
 import { useLocalEvent } from '../../../common/stores/localEvent';
 import ModalSplitInput from '../ModalSplitInput';
 
@@ -9,7 +10,8 @@ export default function EditorSettings() {
   const eventSettings = useLocalEvent((state) => state.eventSettings);
   const setShowQuickEntry = useLocalEvent((state) => state.setShowQuickEntry);
   const setStartTimeIsLastEnd = useLocalEvent((state) => state.setStartTimeIsLastEnd);
-  const setDefaultPublic = useLocalEvent((state) => state.setDefaultPublic);
+  const setDefaultDepartment = useLocalEvent((state) => state.setDefaultDepartment);
+  const { data: departments } = useDepartments();
 
   return (
     <div className={style.sectionContainer}>
@@ -32,12 +34,21 @@ export default function EditorSettings() {
           onChange={(event) => setStartTimeIsLastEnd(event.target.checked)}
         />
       </ModalSplitInput>
-      <ModalSplitInput field='' title='Default public' description='New events will be public'>
-        <Switch
-          variant='ontime-on-light'
-          defaultChecked={eventSettings.defaultPublic}
-          onChange={(event) => setDefaultPublic(event.target.checked)}
-        />
+      <ModalSplitInput field='' title='Default department' description='Default department for new events'>
+        <Select
+          size='sm'
+          width={40}
+          name='defaultDepartment'
+          value={eventSettings.defaultDepartment}
+          onChange={(event) => setDefaultDepartment(event.target.value)}
+        >
+          <option value=''>None</option>
+          {(departments || []).map((department) => (
+            <option key={department.id} value={department.id}>
+              {department.name}
+            </option>
+          ))}
+        </Select>
       </ModalSplitInput>
     </div>
   );

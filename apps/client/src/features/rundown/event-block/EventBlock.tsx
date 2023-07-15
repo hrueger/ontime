@@ -23,7 +23,7 @@ interface EventBlockProps {
   duration: number;
   eventIndex: number;
   eventId: string;
-  isPublic: boolean;
+  department: string;
   endAction: EndAction;
   timerType: TimerType;
   title: string;
@@ -57,7 +57,7 @@ export default function EventBlock(props: EventBlockProps) {
     duration,
     eventIndex,
     eventId,
-    isPublic = true,
+    department,
     endAction,
     timerType,
     title,
@@ -82,15 +82,6 @@ export default function EventBlock(props: EventBlockProps) {
   const openId = useAppMode((state) => state.editId);
   const [onContextMenu] = useContextMenu<HTMLDivElement>([
     { label: `Copy ID: ${eventId}}`, icon: IoCopyOutline, onClick: () => copyToClipboard(eventId) },
-    {
-      label: 'Toggle public',
-      icon: IoPeopleOutline,
-      onClick: () =>
-        updateEvent({
-          id: eventId,
-          isPublic: !isPublic,
-        }),
-    },
   ]);
 
   const {
@@ -179,7 +170,7 @@ export default function EventBlock(props: EventBlockProps) {
           timeEnd={timeEnd}
           duration={duration}
           eventId={eventId}
-          isPublic={isPublic}
+          department={department}
           endAction={endAction}
           timerType={timerType}
           title={title}

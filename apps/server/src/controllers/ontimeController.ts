@@ -158,6 +158,13 @@ export const getUserFields = async (req, res) => {
   res.status(200).send(userFields);
 };
 
+// Create controller for GET request to '/ontime/departments'
+// Returns -
+export const getDepartments = async (req, res) => {
+  const departments = DataProvider.getDepartments();
+  res.status(200).send(departments);
+};
+
 // Create controller for POST request to '/ontime/userfields'
 // Returns ACK message
 export const postUserFields = async (req, res) => {
@@ -168,6 +175,18 @@ export const postUserFields = async (req, res) => {
     const persistedData = DataProvider.getUserFields();
     const newData = mergeObject(persistedData, req.body);
     await DataProvider.setUserFields(newData);
+    res.status(200).send(newData);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+};
+
+// Create controller for POST request to '/ontime/userfields'
+// Returns ACK message
+export const postDepartments = async (req, res) => {
+  try {
+    const newData = req.body;
+    await DataProvider.setDepartments(newData);
     res.status(200).send(newData);
   } catch (error) {
     res.status(400).send(error);

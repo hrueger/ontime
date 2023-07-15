@@ -1,5 +1,14 @@
 import axios from 'axios';
-import { Alias, EventData, OSCSettings, OscSubscription, Settings, UserFields, ViewSettings } from 'ontime-types';
+import {
+  Alias,
+  Departments,
+  EventData,
+  OSCSettings,
+  OscSubscription,
+  Settings,
+  UserFields,
+  ViewSettings,
+} from 'ontime-types';
 
 import { apiRepoLatest } from '../../externals';
 import { InfoType } from '../models/Info';
@@ -76,11 +85,28 @@ export async function getUserFields(): Promise<UserFields> {
 }
 
 /**
+ * @description HTTP request to retrieve departments
+ * @return {Promise}
+ */
+export async function getDepartments(): Promise<Departments> {
+  const res = await axios.get(`${ontimeURL}/departments`);
+  return res.data;
+}
+
+/**
  * @description HTTP request to mutate user fields
  * @return {Promise}
  */
 export async function postUserFields(data: UserFields) {
   return axios.post(`${ontimeURL}/userfields`, data);
+}
+
+/**
+ * @description HTTP request to mutate departments
+ * @return {Promise}
+ */
+export async function postDepartments(data: Departments) {
+  return axios.post(`${ontimeURL}/departments`, data);
 }
 
 /**

@@ -1,10 +1,11 @@
 import { memo, useState } from 'react';
-import { Select, Switch } from '@chakra-ui/react';
-import { EndAction, OntimeEvent, TimerType } from 'ontime-types';
+import { Select } from '@chakra-ui/react';
+import { Department, EndAction, OntimeEvent, TimerType } from 'ontime-types';
 import { millisToString } from 'ontime-utils';
 
 import TimeInput from '../../../common/components/input/time-input/TimeInput';
 import { useEventAction } from '../../../common/hooks/useEventAction';
+import useDepartments from '../../../common/hooks-query/useDepartments';
 import { millisToDelayString } from '../../../common/utils/dateConfig';
 import { cx } from '../../../common/utils/styleUtils';
 import { calculateDuration, TimeEntryField, validateEntry } from '../../../common/utils/timesManager';
@@ -17,17 +18,18 @@ interface EventEditorTimesProps {
   timeEnd: number;
   duration: number;
   delay: number;
-  isPublic: boolean;
   endAction: EndAction;
   timerType: TimerType;
+  department: string;
 }
 
-type TimeActions = 'timeStart' | 'timeEnd' | 'durationOverride' | 'timerType' | 'endAction' | 'isPublic';
+type Actions = 'timeStart' | 'timeEnd' | 'durationOverride' | 'timerType' | 'endAction' | 'department';
 
 // Todo: add previous end to TimeInput fields
 const EventEditorTimes = (props: EventEditorTimesProps) => {
-  const { eventId, timeStart, timeEnd, duration, delay, isPublic, endAction, timerType } = props;
+  const { eventId, timeStart, timeEnd, duration, delay, department, endAction, timerType } = props;
   const { updateEvent } = useEventAction();
+  const { data: departments } = useDepartments();
 
   const [warning, setWarnings] = useState({ start: '', end: '', duration: '' });
 
@@ -37,7 +39,7 @@ const EventEditorTimes = (props: EventEditorTimesProps) => {
     return valid.value;
   };
 
-  const handleSubmit = (field: TimeActions, value: number | string | boolean) => {
+  const handleSubmit = (field: Actions, value: number | string | boolean) => {
     const newEventData: Partial<OntimeEvent> = { id: eventId };
     switch (field) {
       case 'durationOverride': {
@@ -56,8 +58,8 @@ const EventEditorTimes = (props: EventEditorTimesProps) => {
         newEventData.timeEnd = value as number;
         break;
       }
-      case 'isPublic': {
-        updateEvent({ id: eventId, isPublic: !(value as boolean) });
+      case 'department': {
+        updateEvent({ id: eventId, department: value as string });
         break;
       }
       default: {
@@ -145,11 +147,21 @@ const EventEditorTimes = (props: EventEditorTimesProps) => {
           <option value={EndAction.LoadNext}>Load Next</option>
           <option value={EndAction.PlayNext}>Play Next</option>
         </Select>
-        <span className={style.spacer} />
-        <label className={`${style.inputLabel} ${style.publicToggle}`}>
-          <Switch isChecked={isPublic} onChange={() => handleSubmit('isPublic', isPublic)} variant='ontime' />
-          Event is public
-        </label>
+        <label className={style.inputLabel}>Department</label>
+        <Select
+          size='sm'
+          name='department'
+          value={department || ''}
+          onChange={(event) => handleSubmit('department', event.target.value)}
+          variant='ontime'
+        >
+          <option value=''>None</option>
+          {(departments || []).map((department) => (
+            <option key={department.id} value={department.id}>
+              {department.name}
+            </option>
+          ))}
+        </Select>
       </div>
     </div>
   );

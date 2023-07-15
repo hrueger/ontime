@@ -13,10 +13,10 @@ import style from './Table.module.scss';
 export const makeColumns = (sizes, userFields) => {
   return [
     {
-      Header: 'Public',
-      accessor: 'isPublic',
-      Cell: ({ cell: { value } }) => (value ? <FiCheck className={style.check} /> : ''),
-      width: sizes?.isPublic || 50,
+      Header: 'Department',
+      accessor: 'department',
+      Cell: ({ cell: { value } }) => value || '',
+      width: sizes?.department || 50,
     },
     {
       Header: 'Start',

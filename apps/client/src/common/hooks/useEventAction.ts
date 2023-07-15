@@ -23,16 +23,15 @@ export const useEventAction = () => {
   const queryClient = useQueryClient();
   const { emitError } = useEmitLog();
   const eventSettings = useLocalEvent((state) => state.eventSettings);
-  const defaultPublic = eventSettings.defaultPublic;
+  const defaultDepartment = eventSettings.defaultDepartment;
   const startTimeIsLastEnd = eventSettings.startTimeIsLastEnd;
 
   /**
    * Calls mutation to add new event
    * @private
    */
-  const _addEventMutation = useMutation(requestPostEvent, {
-    // Mutation finished, failed or successful
-    // Fetch anyway, just to be sure
+  const _addEventMutation = useMutation({
+    mutationFn: requestPostEvent,
     onSettled: () => {
       queryClient.invalidateQueries(RUNDOWN_TABLE);
     },
@@ -44,7 +43,7 @@ export const useEventAction = () => {
   };
 
   type EventOptions = BaseOptions & {
-    defaultPublic?: boolean;
+    defaultDepartment?: string;
     lastEventId?: string;
     startTimeIsLastEnd?: boolean;
   };
@@ -59,7 +58,7 @@ export const useEventAction = () => {
       // ************* CHECK OPTIONS specific to events
       if (newEvent.type === SupportedEvent.Event) {
         const applicationOptions = {
-          defaultPublic: options?.defaultPublic ?? defaultPublic,
+          defaultDepartment: options?.defaultDepartment ?? defaultDepartment,
           startTimeIsLastEnd: options?.startTimeIsLastEnd ?? startTimeIsLastEnd,
           lastEventId: options?.lastEventId,
           after: options?.after,
@@ -80,8 +79,8 @@ export const useEventAction = () => {
           }
         }
 
-        if (applicationOptions.defaultPublic) {
-          newEvent.isPublic = true;
+        if (applicationOptions.defaultDepartment) {
+          newEvent.department = applicationOptions.defaultDepartment;
         }
       }
 
@@ -101,15 +100,15 @@ export const useEventAction = () => {
         }
       }
     },
-    [_addEventMutation, defaultPublic, emitError, queryClient, startTimeIsLastEnd],
+    [_addEventMutation, defaultDepartment, emitError, queryClient, startTimeIsLastEnd],
   );
 
   /**
    * Calls mutation to update existing event
    * @private
    */
-  const _updateEventMutation = useMutation(requestPutEvent, {
-    // we optimistically update here
+  const _updateEventMutation = useMutation({
+    mutationFn: requestPutEvent,
     onMutate: async (newEvent) => {
       // cancel ongoing queries
       await queryClient.cancelQueries([RUNDOWN_TABLE_KEY, newEvent.id]);
@@ -123,13 +122,9 @@ export const useEventAction = () => {
       // Return a context with the previous and new events
       return { previousEvent, newEvent };
     },
-
-    // Mutation fails, rollback undoes optimist update
     onError: (_error, _newEvent, context) => {
       queryClient.setQueryData([RUNDOWN_TABLE_KEY, context?.newEvent.id], context?.previousEvent);
     },
-    // Mutation finished, failed or successful
-    // Fetch anyway, just to be sure
     onSettled: async () => {
       await queryClient.invalidateQueries([RUNDOWN_TABLE_KEY]);
     },
@@ -158,8 +153,8 @@ export const useEventAction = () => {
    * Calls mutation to delete an event
    * @private
    */
-  const _deleteEventMutation = useMutation(requestDelete, {
-    // we optimistically update here
+  const _deleteEventMutation = useMutation({
+    mutationFn: requestDelete,
     onMutate: async (eventId) => {
       // cancel ongoing queries
       await queryClient.cancelQueries([RUNDOWN_TABLE_KEY, eventId]);
@@ -175,13 +170,9 @@ export const useEventAction = () => {
       // Return a context with the previous and new events
       return { previousEvents };
     },
-
-    // Mutation fails, rollback undoes optimist update
     onError: (_error, _eventId, context) => {
       queryClient.setQueryData(RUNDOWN_TABLE, context?.previousEvents);
     },
-    // Mutation finished, failed or successful
-    // Fetch anyway, just to be sure
     onSettled: () => {
       queryClient.invalidateQueries(RUNDOWN_TABLE);
     },
@@ -210,8 +201,8 @@ export const useEventAction = () => {
    * Calls mutation to delete all events
    * @private
    */
-  const _deleteAllEventsMutation = useMutation(requestDeleteAll, {
-    // we optimistically update here
+  const _deleteAllEventsMutation = useMutation({
+    mutationFn: requestDeleteAll,
     onMutate: async () => {
       // cancel ongoing queries
       await queryClient.cancelQueries(RUNDOWN_TABLE, { exact: true });
@@ -225,13 +216,9 @@ export const useEventAction = () => {
       // Return a context with the previous and new events
       return { previousEvents };
     },
-
-    // Mutation fails, rollback undos optimist update
     onError: (_error, _eventId, context) => {
       queryClient.setQueryData(RUNDOWN_TABLE, context?.previousEvents);
     },
-    // Mutation finished, failed or successful
-    // Fetch anyway, just to be sure
     onSettled: () => {
       queryClient.invalidateQueries(RUNDOWN_TABLE);
     },
@@ -257,8 +244,8 @@ export const useEventAction = () => {
    * Calls mutation to apply a delay
    * @private
    */
-  const _applyDelayMutation = useMutation(requestApplyDelay, {
-    // Mutation finished, failed or successful
+  const _applyDelayMutation = useMutation({
+    mutationFn: requestApplyDelay,
     onSettled: () => {
       queryClient.invalidateQueries(RUNDOWN_TABLE);
     },
@@ -287,8 +274,8 @@ export const useEventAction = () => {
    * Calls mutation to reorder an event
    * @private
    */
-  const _reorderEventMutation = useMutation(requestReorderEvent, {
-    // we optimistically update here
+  const _reorderEventMutation = useMutation({
+    mutationFn: requestReorderEvent,
     onMutate: async (data) => {
       // cancel ongoing queries
       await queryClient.cancelQueries(RUNDOWN_TABLE, { exact: true });
@@ -306,13 +293,9 @@ export const useEventAction = () => {
       // Return a context with the previous and new events
       return { previousEvents };
     },
-
-    // Mutation fails, rollback undoes optimist update
     onError: (_error, _eventId, context) => {
       queryClient.setQueryData(RUNDOWN_TABLE, context?.previousEvents);
     },
-    // Mutation finished, failed or successful
-    // Fetch anyway, just to be sure
     onSettled: () => {
       queryClient.invalidateQueries(RUNDOWN_TABLE);
     },

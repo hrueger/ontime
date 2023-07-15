@@ -65,4 +65,5 @@ export const dbModel: DatabaseModel = {
       onFinish: [],
     },
   },
+  departments: [],
 };

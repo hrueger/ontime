@@ -55,7 +55,7 @@ export default function EventEditor() {
         timeEnd={event.timeEnd}
         duration={event.duration}
         delay={delay}
-        isPublic={event.isPublic}
+        department={event.department}
         endAction={event.endAction}
         timerType={event.timerType}
       />

@@ -1,11 +1,11 @@
 import { create } from 'zustand';
 
-import { booleanFromLocalStorage } from '../utils/localStorage';
+import { booleanFromLocalStorage, stringFromLocalStorage } from '../utils/localStorage';
 
 type EventSettings = {
   showQuickEntry: boolean;
   startTimeIsLastEnd: boolean;
-  defaultPublic: boolean;
+  defaultDepartment: string;
 };
 
 type LocalEventStore = {
@@ -13,27 +13,27 @@ type LocalEventStore = {
   setLocalEventSettings: (newState: EventSettings) => void;
   setShowQuickEntry: (showQuickEntry: boolean) => void;
   setStartTimeIsLastEnd: (startTimeIsLastEnd: boolean) => void;
-  setDefaultPublic: (defaultPublic: boolean) => void;
+  setDefaultDepartment: (defaultDepartment: string) => void;
 };
 
 enum LocalEventKeys {
   ShowQuickEntry = 'ontime-show-quick-entry',
   StartTimeIsLastEnd = 'ontime-start-is-last-end',
-  DefaultPublic = 'ontime-default-public',
+  DefaultDepartment = 'ontime-default-department',
 }
 
 export const useLocalEvent = create<LocalEventStore>((set) => ({
   eventSettings: {
     showQuickEntry: booleanFromLocalStorage(LocalEventKeys.ShowQuickEntry, false),
-    startTimeIsLastEnd: booleanFromLocalStorage(LocalEventKeys.ShowQuickEntry, true),
-    defaultPublic: booleanFromLocalStorage(LocalEventKeys.ShowQuickEntry, true),
+    startTimeIsLastEnd: booleanFromLocalStorage(LocalEventKeys.StartTimeIsLastEnd, true),
+    defaultDepartment: stringFromLocalStorage(LocalEventKeys.DefaultDepartment, ''),
   },
 
   setLocalEventSettings: (value) =>
     set(() => {
       localStorage.setItem(LocalEventKeys.ShowQuickEntry, String(value.showQuickEntry));
       localStorage.setItem(LocalEventKeys.StartTimeIsLastEnd, String(value.startTimeIsLastEnd));
-      localStorage.setItem(LocalEventKeys.DefaultPublic, String(value.defaultPublic));
+      localStorage.setItem(LocalEventKeys.DefaultDepartment, String(value.defaultDepartment));
       return { eventSettings: value };
     }),
 
@@ -49,9 +49,9 @@ export const useLocalEvent = create<LocalEventStore>((set) => ({
       return { eventSettings: { ...state.eventSettings, startTimeIsLastEnd } };
     }),
 
-  setDefaultPublic: (defaultPublic) =>
+  setDefaultDepartment: (defaultDepartment) =>
     set((state) => {
-      localStorage.setItem(LocalEventKeys.DefaultPublic, String(defaultPublic));
-      return { eventSettings: { ...state.eventSettings, defaultPublic } };
+      localStorage.setItem(LocalEventKeys.DefaultDepartment, String(defaultDepartment));
+      return { eventSettings: { ...state.eventSettings, defaultDepartment } };
     }),
 }));

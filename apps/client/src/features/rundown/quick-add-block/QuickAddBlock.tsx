@@ -1,8 +1,9 @@
 import { memo, useCallback, useRef } from 'react';
-import { Button, Checkbox, Tooltip } from '@chakra-ui/react';
+import { Button, Checkbox, Select, Tooltip } from '@chakra-ui/react';
 import { SupportedEvent } from 'ontime-types';
 
 import { useEventAction } from '../../../common/hooks/useEventAction';
+import useDepartments from '../../../common/hooks-query/useDepartments';
 import { useLocalEvent } from '../../../common/stores/localEvent';
 import { useEmitLog } from '../../../common/stores/logger';
 import { tooltipDelayMid } from '../../../ontimeConfig';
@@ -21,24 +22,25 @@ const QuickAddBlock = (props: QuickAddBlockProps) => {
   const { showKbd, eventId, previousEventId, disableAddDelay = true, disableAddBlock } = props;
   const { addEvent } = useEventAction();
   const { emitError } = useEmitLog();
+  const { data: departments } = useDepartments();
 
-  const doStartTime = useRef<HTMLInputElement | null>(null);
-  const doPublic = useRef<HTMLInputElement | null>(null);
+  const doStartTime = useRef<HTMLInputElement>(null);
+  const department = useRef<HTMLInputElement>(null);
 
   const eventSettings = useLocalEvent((state) => state.eventSettings);
-  const defaultPublic = eventSettings.defaultPublic;
+  const defaultDepartment = eventSettings.defaultDepartment;
   const startTimeIsLastEnd = eventSettings.startTimeIsLastEnd;
 
   const handleCreateEvent = useCallback(
     (eventType: SupportedEvent) => {
       switch (eventType) {
         case 'event': {
-          const isPublicOption = doPublic?.current?.checked;
+          const defaultDepartment = department?.current?.value;
           const startTimeIsLastEndOption = doStartTime?.current?.checked;
 
           const newEvent = { type: SupportedEvent.Event };
           const options = {
-            defaultPublic: isPublicOption,
+            defaultDepartment: defaultDepartment,
             startTimeIsLastEnd: startTimeIsLastEndOption,
             lastEventId: previousEventId,
             after: eventId,
@@ -111,9 +113,20 @@ const QuickAddBlock = (props: QuickAddBlockProps) => {
         <Checkbox ref={doStartTime} size='sm' variant='ontime-ondark' defaultChecked={startTimeIsLastEnd}>
           Start time is last end
         </Checkbox>
-        <Checkbox ref={doPublic} size='sm' variant='ontime-ondark' defaultChecked={defaultPublic}>
-          Event is public
-        </Checkbox>
+        <Select
+          ref={department as any}
+          size='sm'
+          variant='ontime'
+          defaultValue={defaultDepartment}
+          className={style.department}
+        >
+          <option value=''>None</option>
+          {departments?.map((department) => (
+            <option key={department.id} value={department.id}>
+              {department.name}
+            </option>
+          ))}
+        </Select>
       </div>
     </div>
   );

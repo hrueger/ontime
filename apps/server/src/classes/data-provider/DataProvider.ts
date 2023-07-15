@@ -135,6 +135,10 @@ export class DataProvider {
     return { ...data.userFields };
   }
 
+  static getDepartments() {
+    return [...(data.departments || [])];
+  }
+
   static getViewSettings() {
     return { ...data.viewSettings };
   }
@@ -146,6 +150,10 @@ export class DataProvider {
 
   static async setUserFields(newData) {
     data.userFields = { ...newData };
+    await this.persist();
+  }
+  static async setDepartments(newData) {
+    data.departments = [...newData];
     await this.persist();
   }
 

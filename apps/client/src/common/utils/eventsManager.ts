@@ -118,7 +118,7 @@ export const cloneEvent = (event: OntimeEvent, after?: string): ClonedEvent => {
     note: event.note,
     timeStart: event.timeStart,
     timeEnd: event.timeEnd,
-    isPublic: event.isPublic,
+    department: event.department,
     skip: event.skip,
     colour: event.colour,
     after: after,

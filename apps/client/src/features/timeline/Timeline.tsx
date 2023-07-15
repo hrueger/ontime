@@ -3,17 +3,19 @@ import { FiZoomIn } from '@react-icons/all-files/fi/FiZoomIn';
 import { FiZoomOut } from '@react-icons/all-files/fi/FiZoomOut';
 import { OntimeEvent } from 'ontime-types';
 
+import useDepartments from '../../common/hooks-query/useDepartments';
 import useRundown from '../../common/hooks-query/useRundown';
 
 import Track from './Track';
+import TrackHeader from './TrackHeader';
 
 import style from './Timeline.module.scss';
-import TrackHeader from './TrackHeader';
 
 export default function Timeline() {
   const { data } = useRundown() as { data: OntimeEvent[] };
   const [zoomFactor, setZoomFactor] = useState(1);
   const [verticalZoomFactor, setVerticalZoomFactor] = useState(1);
+  const { data: departments } = useDepartments();
 
   if (data.length === 0) return null;
 
@@ -98,8 +100,12 @@ export default function Timeline() {
           }
         >
           <TrackHeader start={earliestEvent!.timeStart} end={latestEvent!.timeEnd} length={totalLength!} />
-          <Track items={mappedEvents.filter((e) => e.event.isPublic)} />
-          <Track items={mappedEvents.filter((e) => !e.event.isPublic)} />
+          {[{ id: '', enabled: true, name: 'General' }].concat(departments || []).map((department) => (
+            <div className={style.trackLabelContainer} key={department.id}>
+              <span className={style.trackLabel}>{department.name}</span>
+              <Track items={mappedEvents.filter((e) => e.event.department === department.id)} key={department.id} />
+            </div>
+          ))}
         </div>
       </div>
       <div className={style.timelineControls}>

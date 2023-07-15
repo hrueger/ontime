@@ -4,6 +4,7 @@ import {
   dbDownload,
   dbUpload,
   getAliases,
+  getDepartments,
   getInfo,
   getOSC,
   getSettings,
@@ -11,6 +12,7 @@ import {
   getViewSettings,
   poll,
   postAliases,
+  postDepartments,
   postNew,
   postOSC,
   postOscSubscriptions,
@@ -21,6 +23,7 @@ import {
 
 import {
   validateAliases,
+  validateDepartments,
   validateOSC,
   validateOscSubscription,
   validateSettings,
@@ -63,6 +66,12 @@ router.get('/userfields', getUserFields);
 
 // create route between controller and '/ontime/aliases' endpoint
 router.post('/userfields', validateUserFields, postUserFields);
+
+// create route between controller and '/ontime/aliases' endpoint
+router.get('/departments', getDepartments);
+
+// create route between controller and '/ontime/aliases' endpoint
+router.post('/departments', validateDepartments, postDepartments);
 
 // create route between controller and '/ontime/info' endpoint
 router.get('/info', getInfo);

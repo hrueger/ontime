@@ -30,7 +30,7 @@ export default function Schedule({ className }: ScheduleProps) {
             selectedState = 'future';
           }
         }
-        return <ScheduleItem key={event.id} selected={selectedState} backstageEvent={!event.isPublic} event={event} />;
+        return <ScheduleItem key={event.id} selected={selectedState} event={event} />;
       })}
     </ul>
   );

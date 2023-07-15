@@ -4,6 +4,7 @@ export const STATIC_PORT = 4001;
 export const EVENT_DATA = ['eventdata'];
 export const ALIASES = ['aliases'];
 export const USERFIELDS = ['userFields'];
+export const DEPARTMENTS = ['departments'];
 export const RUNDOWN_TABLE_KEY = 'rundown';
 export const RUNDOWN_TABLE = [RUNDOWN_TABLE_KEY];
 export const APP_INFO = ['appinfo'];

@@ -46,7 +46,6 @@ const EventEditorTitles = (props: EventEditorTitlesProps) => {
   };
 
   const { data: userFields } = useUserFields();
-  console.log(userFields);
 
   return (
     <div className={style.titles}>

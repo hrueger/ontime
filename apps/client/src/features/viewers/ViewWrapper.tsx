@@ -21,13 +21,6 @@ const withData = <P extends object>(Component: ComponentType<P>) => {
     const { data: eventData } = useEventData();
     const { data: viewSettings } = useViewSettings();
 
-    const publicEvents = useMemo(() => {
-      if (Array.isArray(rundownData)) {
-        return rundownData.filter((e) => e.type === 'event' && e.title && e.isPublic);
-      }
-      return [];
-    }, [rundownData]);
-
     // websocket data
     const data = useStore(runtime);
     const { timer, titles, titlesPublic, publicMessage, timerMessage, lowerMessage, playback, onAir } = data;
@@ -98,7 +91,7 @@ const withData = <P extends object>(Component: ComponentType<P>) => {
         title={titleManager}
         publicTitle={publicTitleManager}
         time={TimeManagerType}
-        events={publicEvents}
+        events={rundownData || []}
         backstageEvents={rundownData}
         selectedId={selectedId}
         publicSelectedId={publicSelectedId}

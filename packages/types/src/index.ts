@@ -23,6 +23,7 @@ import { TimerType } from './definitions/TimerType.type.js';
 import { TitleBlock } from './definitions/runtime/TitleBlock.type.js';
 import { UserFields } from './definitions/core/UserFields.type.js';
 import { ViewSettings } from './definitions/core/Views.type.js';
+import { Department, Departments } from './definitions/core/Department.type.js';
 
 // DATA MODEL
 export type { DatabaseModel };
@@ -48,6 +49,9 @@ export type { Alias };
 
 // ---> User Fields
 export type { UserFields };
+
+// ---> Departments
+export type { Department, Departments };
 
 // ---> OSC
 export type { OscSubscription, OSCSettings, OscSubscriptionOptions };

@@ -37,15 +37,6 @@ export default function InputRow(props: InputRowProps) {
           onChange={(event) => handleInputChange(event.target.value)}
           placeholder={placeholder}
         />
-        <TooltipActionBtn
-          clickHandler={() => actionHandler('update', { field: 'isPublic', value: !visible })}
-          tooltip={visible ? 'Make invisible' : 'Make visible'}
-          aria-label={`Toggle ${label}`}
-          openDelay={tooltipDelayMid}
-          icon={visible ? <IoEye size='18px' /> : <IoEyeOffOutline size='18px' />}
-          variant={visible ? 'ontime-filled' : 'ontime-subtle'}
-          size='sm'
-        />
       </div>
     </div>
   );

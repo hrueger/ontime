@@ -35,7 +35,7 @@ export type OntimeEvent = OntimeBaseEvent & {
   timeStart: number;
   timeEnd: number;
   duration: number;
-  isPublic: boolean;
+  department: string;
   skip: boolean;
   colour: string;
   user0: string;

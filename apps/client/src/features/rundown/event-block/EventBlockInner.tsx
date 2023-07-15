@@ -38,7 +38,7 @@ interface EventBlockInnerProps {
   timeEnd: number;
   duration: number;
   eventId: string;
-  isPublic: boolean;
+  department: string;
   endAction: EndAction;
   timerType: TimerType;
   title: string;
@@ -61,7 +61,7 @@ const EventBlockInner = (props: EventBlockInnerProps) => {
     timeEnd,
     duration,
     eventId,
-    isPublic = true,
+    department,
     endAction,
     timerType,
     title,
@@ -142,10 +142,8 @@ const EventBlockInner = (props: EventBlockInnerProps) => {
               <EndActionIcon action={endAction} className={style.statusIcon} />
             </span>
           </Tooltip>
-          <Tooltip label={`${isPublic ? 'Event is public' : 'Event is private'}`} {...tooltipProps}>
-            <span>
-              <IoPeople className={`${style.statusIcon} ${isPublic ? style.active : style.disabled}`} />
-            </span>
+          <Tooltip label={`${department}`} {...tooltipProps}>
+            <span>{department}</span>
           </Tooltip>
         </div>
       </div>

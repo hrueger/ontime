@@ -27,7 +27,7 @@ export default function Rundown(props: RundownProps) {
   const featureData = useRundownEditor();
   const { addEvent, reorderEvent } = useEventAction();
   const eventSettings = useLocalEvent((state) => state.eventSettings);
-  const defaultPublic = eventSettings.defaultPublic;
+  const defaultDepartment = eventSettings.defaultDepartment;
   const startTimeIsLastEnd = eventSettings.startTimeIsLastEnd;
   const showQuickEntry = eventSettings.showQuickEntry;
 
@@ -68,7 +68,7 @@ export default function Rundown(props: RundownProps) {
           type: SupportedEvent.Event,
         };
         const options = {
-          defaultPublic: defaultPublic,
+          defaultDepartment: defaultDepartment,
           startTimeIsLastEnd: startTimeIsLastEnd,
           lastEventId: cursor,
           after: cursor,
@@ -78,7 +78,7 @@ export default function Rundown(props: RundownProps) {
         addEvent({ type }, { after: cursor });
       }
     },
-    [addEvent, defaultPublic, entries, startTimeIsLastEnd],
+    [addEvent, defaultDepartment, entries, startTimeIsLastEnd],
   );
 
   // Handle keyboard shortcuts

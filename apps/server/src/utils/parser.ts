@@ -40,7 +40,7 @@ export const parseExcel = async (excelData) => {
   let titleIndex: number | null = null;
   let presenterIndex: number | null = null;
   let subtitleIndex: number | null = null;
-  let isPublicIndex: number | null = null;
+  let departmentIndex: number | null = null;
   let skipIndex: number | null = null;
   let notesIndex: number | null = null;
   let colourIndex: number | null = null;
@@ -95,8 +95,8 @@ export const parseExcel = async (excelData) => {
           event.presenter = column;
         } else if (j === subtitleIndex) {
           event.subtitle = column;
-        } else if (j === isPublicIndex) {
-          event.isPublic = Boolean(column);
+        } else if (j === departmentIndex) {
+          event.department = column;
         } else if (j === skipIndex) {
           event.skip = Boolean(column);
         } else if (j === notesIndex) {
@@ -170,10 +170,8 @@ export const parseExcel = async (excelData) => {
               case 'subtitle':
                 subtitleIndex = j;
                 break;
-              case 'is public? (x)':
-              case 'is public':
-              case 'public':
-                isPublicIndex = j;
+              case 'department':
+                departmentIndex = j;
                 break;
               case 'skip? (x)':
               case 'skip?':
@@ -323,7 +321,7 @@ export const validateEvent = (eventArgs) => {
       endAction: makeString(e.endAction, d.endAction),
       timerType: makeString(e.timerType, d.timerType),
       duration: validateDuration(start, end),
-      isPublic: typeof e.isPublic === 'boolean' ? e.isPublic : d.isPublic,
+      department: makeString(e.department, d.department),
       skip: typeof e.skip === 'boolean' ? e.skip : d.skip,
       note: makeString(e.note, d.note),
       user0: makeString(e.user0, d.user0),

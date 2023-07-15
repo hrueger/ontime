@@ -9,7 +9,6 @@ import style from './Info.module.scss';
 
 export default function Info() {
   const data = useInfoPanel();
-  console.log(data);
 
   const selected = !data.numEvents
     ? 'No events'

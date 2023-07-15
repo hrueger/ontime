@@ -2,7 +2,7 @@
  * @description set default column order
  */
 export const defaultColumnOrder = [
-  'isPublic',
+  'department',
   'timeStart',
   'timeEnd',
   'duration',

@@ -64,7 +64,7 @@ export default function RundownEntry(props: RundownEntryProps) {
   }, [cursor, data.id, openId, setCursor, setEditId]);
 
   const eventSettings = useLocalEvent((state) => state.eventSettings);
-  const defaultPublic = eventSettings.defaultPublic;
+  const defaultDepartment = eventSettings.defaultDepartment;
   const startTimeIsLastEnd = eventSettings.startTimeIsLastEnd;
 
   // Create / delete new events
@@ -82,7 +82,7 @@ export default function RundownEntry(props: RundownEntryProps) {
           const newEvent = { type: SupportedEvent.Event };
           const options = {
             startTimeIsLastEnd,
-            defaultPublic,
+            defaultDepartment,
             lastEventId: previousEventId,
             after: data.id,
           };
@@ -143,7 +143,7 @@ export default function RundownEntry(props: RundownEntryProps) {
     [
       addEvent,
       data,
-      defaultPublic,
+      defaultDepartment,
       deleteEvent,
       emitError,
       openId,
@@ -162,11 +162,11 @@ export default function RundownEntry(props: RundownEntryProps) {
         duration={data.duration}
         eventIndex={eventIndex + 1}
         eventId={data.id}
-        isPublic={data.isPublic}
         endAction={data.endAction}
         timerType={data.timerType}
         title={data.title}
         note={data.note}
+        department={data.department}
         delay={delay}
         previousEnd={previousEnd}
         colour={data.colour}
