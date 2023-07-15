@@ -58,6 +58,12 @@ export const ScheduleProvider = ({
     }
   }, time * 1000);
 
+  // whenever filteredEvents changes, reset the visible page to 0
+  // this is to prevent the user from being stuck on a page that no longer exists
+  // e.g. if the user is on page 2 of 3 and a filter is applied that reduces the number of pages to 2
+
+  // TODO
+
   return (
     <ScheduleContext.Provider
       value={{

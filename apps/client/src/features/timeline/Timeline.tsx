@@ -5,6 +5,7 @@ import { OntimeEvent } from 'ontime-types';
 
 import useDepartments from '../../common/hooks-query/useDepartments';
 import useRundown from '../../common/hooks-query/useRundown';
+import { filterEvents } from '../../common/utils/eventFilter';
 
 import Track from './Track';
 import TrackHeader from './TrackHeader';
@@ -85,8 +86,6 @@ export default function Timeline() {
     }
   }
 
-  const mappedEvents = data.map((event) => ({ event, ...getPositions(event) }));
-
   return (
     <>
       <div className={style.timelineContainer} onWheel={(event) => handleScroll(event)}>
@@ -100,17 +99,18 @@ export default function Timeline() {
           }
         >
           {false && <TrackHeader start={earliestEvent!.timeStart} end={latestEvent!.timeEnd} length={totalLength!} />}
-          {[{ id: '', enabled: true, name: 'General' }].concat(departments || []).map((department) => (
-            <div className={style.trackLabelContainer} key={department.id}>
-              <span className={style.trackLabel}>{department.name}</span>
-              <Track
-                items={mappedEvents.filter(
-                  (e) => (!department.id && !e.event.department) || e.event.department === department.id,
-                )}
-                key={department.id}
-              />
-            </div>
-          ))}
+          {[{ id: '', enabled: true, name: 'General' }].concat(departments || []).map((department) => {
+            const mappedEvents = filterEvents(data, department.id, false).map((event) => ({
+              event,
+              ...getPositions(event),
+            }));
+            return (
+              <div className={style.trackLabelContainer} key={department.id}>
+                <span className={style.trackLabel}>{department.name}</span>
+                <Track items={mappedEvents} key={department.id} />
+              </div>
+            );
+          })}
         </div>
       </div>
       <div className={style.timelineControls}>

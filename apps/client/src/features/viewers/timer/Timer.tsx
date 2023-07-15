@@ -6,12 +6,10 @@ import { overrideStylesURL } from '../../../common/api/apiConstants';
 import MultiPartProgressBar from '../../../common/components/multi-part-progress-bar/MultiPartProgressBar';
 import NavigationMenu from '../../../common/components/navigation-menu/NavigationMenu';
 import TitleCard from '../../../common/components/title-card/TitleCard';
-import {
-  getNotesOrUserFieldsFieldOption,
-  TIMER_OPTIONS,
-} from '../../../common/components/view-params-editor/constants';
+import { getDynamicFieldOptions, TIMER_OPTIONS } from '../../../common/components/view-params-editor/constants';
 import ViewParamsEditor from '../../../common/components/view-params-editor/ViewParamsEditor';
 import { useRuntimeStylesheet } from '../../../common/hooks/useRuntimeStylesheet';
+import useDepartments from '../../../common/hooks-query/useDepartments';
 import useUserFields from '../../../common/hooks-query/useUserFields';
 import { TimeManagerType } from '../../../common/models/TimeManager.type';
 import { formatTime } from '../../../common/utils/time';
@@ -56,6 +54,7 @@ export default function Timer(props: TimerProps) {
   const { shouldRender } = useRuntimeStylesheet(viewSettings?.overrideStyles && overrideStylesURL);
   const { getLocalizedString } = useTranslation();
   const { data: userFields } = useUserFields();
+  const { data: departments } = useDepartments();
 
   useEffect(() => {
     document.title = 'ontime - Timer';
@@ -105,7 +104,7 @@ export default function Timer(props: TimerProps) {
   return (
     <div className={showFinished ? `${baseClasses} stage-timer--finished` : baseClasses} data-testid='timer-view'>
       <NavigationMenu />
-      <ViewParamsEditor paramFields={[...TIMER_OPTIONS, getNotesOrUserFieldsFieldOption(userFields)]} />
+      <ViewParamsEditor paramFields={[...TIMER_OPTIONS, ...getDynamicFieldOptions(userFields, departments)]} />
       <div className={showOverlay ? 'message-overlay message-overlay--active' : 'message-overlay'}>
         <div className={`message ${showBlinking ? 'blink' : ''}`}>{pres.text}</div>
       </div>

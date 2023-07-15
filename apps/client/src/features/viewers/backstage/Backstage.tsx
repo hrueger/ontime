@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import QRCode from 'react-qr-code';
+import { useSearchParams } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { EventData, Message, OntimeEvent, ViewSettings } from 'ontime-types';
 import { formatDisplay } from 'ontime-utils';
@@ -11,14 +12,13 @@ import Schedule from '../../../common/components/schedule/Schedule';
 import { ScheduleProvider } from '../../../common/components/schedule/ScheduleContext';
 import ScheduleNav from '../../../common/components/schedule/ScheduleNav';
 import TitleCard from '../../../common/components/title-card/TitleCard';
-import {
-  getNotesOrUserFieldsFieldOption,
-  TIME_FORMAT_OPTION,
-} from '../../../common/components/view-params-editor/constants';
+import { getDynamicFieldOptions, TIME_FORMAT_OPTION } from '../../../common/components/view-params-editor/constants';
 import ViewParamsEditor from '../../../common/components/view-params-editor/ViewParamsEditor';
 import { useRuntimeStylesheet } from '../../../common/hooks/useRuntimeStylesheet';
+import useDepartments from '../../../common/hooks-query/useDepartments';
 import useUserFields from '../../../common/hooks-query/useUserFields';
 import { TimeManagerType } from '../../../common/models/TimeManager.type';
+import { filterEvents } from '../../../common/utils/eventFilter';
 import { getEventsWithDelay } from '../../../common/utils/eventsManager';
 import { formatTime } from '../../../common/utils/time';
 import { useTranslation } from '../../../translation/TranslationProvider';
@@ -48,6 +48,8 @@ export default function Backstage(props: BackstageProps) {
   const { shouldRender } = useRuntimeStylesheet(viewSettings?.overrideStyles && overrideStylesURL);
   const { getLocalizedString } = useTranslation();
   const { data: userFields } = useUserFields();
+  const { data: departments } = useDepartments();
+  const [searchParams] = useSearchParams();
 
   // Set window title
   useEffect(() => {
@@ -67,7 +69,11 @@ export default function Backstage(props: BackstageProps) {
     : formatTime(time.expectedFinish, formatOptions);
 
   const qrSize = Math.max(window.innerWidth / 15, 128);
-  const filteredEvents = getEventsWithDelay(backstageEvents);
+  const department = searchParams.get('department') ?? '';
+  const hideGeneral = searchParams.get('hideGeneral') === 'true';
+  const events = getEventsWithDelay(backstageEvents);
+  const filteredEvents = filterEvents(events, department, hideGeneral);
+
   const showPublicMessage = publ.text && publ.visible;
   const showProgress = time.playback !== 'stop';
 
@@ -86,7 +92,7 @@ export default function Backstage(props: BackstageProps) {
   return (
     <div className={`backstage ${isMirrored ? 'mirror' : ''}`} data-testid='backstage-view'>
       <NavigationMenu />
-      <ViewParamsEditor paramFields={[TIME_FORMAT_OPTION, getNotesOrUserFieldsFieldOption(userFields)]} />
+      <ViewParamsEditor paramFields={[TIME_FORMAT_OPTION, ...getDynamicFieldOptions(userFields, departments)]} />
       <div className='event-header'>
         {general.title}
         <div className='clock-container'>

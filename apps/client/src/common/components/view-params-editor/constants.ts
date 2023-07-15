@@ -1,4 +1,4 @@
-import { UserFields } from 'ontime-types';
+import { Departments, UserFields } from 'ontime-types';
 
 import { ParamField } from './types';
 
@@ -70,21 +70,41 @@ export const CLOCK_OPTIONS: ParamField[] = [
   },
 ];
 
-export function getNotesOrUserFieldsFieldOption(userFields: UserFields | undefined): ParamField {
-  return {
-    id: 'showField',
-    description: 'What to show next to the subtitle',
-    title: 'Show Field',
-    type: 'option',
-    values: {
-      note: 'Notes',
-      ...Object.fromEntries(
-        Object.entries(userFields ?? {})
-          .filter(([key]) => !key.endsWith('Enabled') && ((userFields as any) || [])[`${key}Enabled`])
-          .map(([key, value]) => [key, value as string]),
-      ),
+export function getDynamicFieldOptions(
+  userFields: UserFields | undefined,
+  departments: Departments | undefined,
+): ParamField[] {
+  return [
+    {
+      id: 'showField',
+      description: 'What to show next to the subtitle',
+      title: 'Show Field',
+      type: 'option',
+      values: {
+        note: 'Notes',
+        ...Object.fromEntries(
+          Object.entries(userFields ?? {})
+            .filter(([key]) => !key.endsWith('Enabled') && ((userFields as any) || [])[`${key}Enabled`])
+            .map(([key, value]) => [key, value as string]),
+        ),
+      },
     },
-  };
+    {
+      id: 'department',
+      description: 'Filter by Department. PLEASE REFRESH PAGE AFTER SAVING CHANGES',
+      title: 'Department',
+      type: 'option',
+      values: {
+        ...Object.fromEntries(departments?.map((department) => [department.id, department.name]) ?? []),
+      },
+    },
+    {
+      id: 'hideGeneral',
+      description: 'Whether to hide general events (events without a department)',
+      title: 'Hide General',
+      type: 'boolean',
+    },
+  ];
 }
 
 export const TIMER_OPTIONS: ParamField[] = [TIME_FORMAT_OPTION];

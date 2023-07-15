@@ -9,14 +9,13 @@ import Schedule from '../../../common/components/schedule/Schedule';
 import { ScheduleProvider } from '../../../common/components/schedule/ScheduleContext';
 import ScheduleNav from '../../../common/components/schedule/ScheduleNav';
 import TitleCard from '../../../common/components/title-card/TitleCard';
-import {
-  getNotesOrUserFieldsFieldOption,
-  TIME_FORMAT_OPTION,
-} from '../../../common/components/view-params-editor/constants';
+import { getDynamicFieldOptions, TIME_FORMAT_OPTION } from '../../../common/components/view-params-editor/constants';
 import ViewParamsEditor from '../../../common/components/view-params-editor/ViewParamsEditor';
 import { useRuntimeStylesheet } from '../../../common/hooks/useRuntimeStylesheet';
+import useDepartments from '../../../common/hooks-query/useDepartments';
 import useUserFields from '../../../common/hooks-query/useUserFields';
 import { TimeManagerType } from '../../../common/models/TimeManager.type';
+import { filterEvents } from '../../../common/utils/eventFilter';
 import { formatTime } from '../../../common/utils/time';
 import { useTranslation } from '../../../translation/TranslationProvider';
 import { titleVariants } from '../common/animation';
@@ -45,6 +44,7 @@ export default function Public(props: BackstageProps) {
   const { shouldRender } = useRuntimeStylesheet(viewSettings?.overrideStyles && overrideStylesURL);
   const { getLocalizedString } = useTranslation();
   const { data: userFields } = useUserFields();
+  const { data: departments } = useDepartments();
 
   useEffect(() => {
     document.title = 'ontime - Public Screen';
@@ -62,7 +62,7 @@ export default function Public(props: BackstageProps) {
   return (
     <div className={`public-screen ${isMirrored ? 'mirror' : ''}`} data-testid='public-view'>
       <NavigationMenu />
-      <ViewParamsEditor paramFields={[TIME_FORMAT_OPTION, getNotesOrUserFieldsFieldOption(userFields)]} />
+      <ViewParamsEditor paramFields={[TIME_FORMAT_OPTION, ...getDynamicFieldOptions(userFields, departments)]} />
       <div className='event-header'>
         {general.title}
         <div className='clock-container'>
@@ -103,7 +103,7 @@ export default function Public(props: BackstageProps) {
         </AnimatePresence>
       </div>
 
-      <ScheduleProvider events={events} selectedEventId={publicSelectedId}>
+      <ScheduleProvider events={filterEvents(events, '', false)} selectedEventId={publicSelectedId}>
         <ScheduleNav className='schedule-nav-container' />
         <Schedule className='schedule-container' />
       </ScheduleProvider>

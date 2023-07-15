@@ -10,7 +10,7 @@ interface ScheduleProps {
 }
 
 export default function Schedule({ className }: ScheduleProps) {
-  const { paginatedEvents, selectedEventId, isBackstage, scheduleType } = useSchedule();
+  const { paginatedEvents, selectedEventId, scheduleType } = useSchedule();
 
   if (paginatedEvents?.length < 1) {
     return <Empty text='No events to show' />;
