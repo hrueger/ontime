@@ -62,8 +62,8 @@ export const getRollTimers = (rundown: OntimeEvent[], timeNow: number) => {
     nextIndex = 0;
     nextEvent = firstEvent;
     timeToNext = firstEvent.timeStart + DAY_TO_MS - timeNow;
-
-    if (firstEvent.isPublic) {
+    // ToDo: replace with actual logic
+    if (!firstEvent.department) {
       nextPublicEvent = firstEvent;
       publicNextIndex = 0;
     } else {
@@ -71,7 +71,8 @@ export const getRollTimers = (rundown: OntimeEvent[], timeNow: number) => {
       // dev note: we feel that this is more efficient than filtering
       // since the next event will likely be close to the one playing
       for (const event of orderedEvents) {
-        if (event.isPublic) {
+        // ToDo: replace with actual logic
+        if (!event.department) {
           nextPublicEvent = event;
           // we need the index before this was sorted
           publicNextIndex = rundown.findIndex((rundownEvent) => rundownEvent.id === event.id);
@@ -91,8 +92,8 @@ export const getRollTimers = (rundown: OntimeEvent[], timeNow: number) => {
 
       if (normalEnd <= timeNow) {
         // event ran already
-
-        if (event.isPublic && normalEnd > publicTime) {
+        // ToDo: replace with actual logic
+        if (!event.department && normalEnd > publicTime) {
           // public event might not be the one running
           publicTime = normalEnd;
           currentPublicEvent = event;
@@ -106,7 +107,8 @@ export const getRollTimers = (rundown: OntimeEvent[], timeNow: number) => {
         nowFound = true;
 
         // it could also be public
-        if (event.isPublic) {
+        // ToDo: replace with actual logic
+        if (!event.department) {
           publicTime = normalEnd;
           currentPublicEvent = event;
           publicIndex = rundown.findIndex((rundownEvent) => rundownEvent.id === event.id);
@@ -129,8 +131,8 @@ export const getRollTimers = (rundown: OntimeEvent[], timeNow: number) => {
           nextEvent = event;
           nextIndex = rundown.findIndex((rundownEvent) => rundownEvent.id === event.id);
         }
-
-        if (event.isPublic) {
+        // ToDo: replace with actual logic
+        if (!event.department) {
           // if we don't have a public next or this one start sooner than assigned next
           if (publicNextIndex === null || timeToEventStart < publicTimeToNext) {
             publicTimeToNext = timeToEventStart;

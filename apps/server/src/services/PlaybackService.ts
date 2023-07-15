@@ -76,6 +76,24 @@ export class PlaybackService {
   }
 
   /**
+   * loads events matching given cue
+   * @param {string} cue
+   * @return {boolean} success
+   */
+  static loadByCue(cue: string): boolean {
+    const events = EventLoader.getEventsWithCue(cue);
+    let success = false;
+    for (const event of events) {
+      const s = PlaybackService.loadEvent(event);
+      success = success && s;
+    }
+    if (success) {
+      logger.info('PLAYBACK', `Loaded events with cue ${cue}`);
+    }
+    return success;
+  }
+
+  /**
    * loads event matching given ID
    * @param {number} eventIndex
    * @return {boolean} success

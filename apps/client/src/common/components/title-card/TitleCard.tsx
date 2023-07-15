@@ -25,7 +25,7 @@ export default function TitleCard(props: TitleCardProps) {
       <span className={accent ? 'label accent' : 'label'}>{getLocalizedString(`common.${label}`)}</span>
       <div className='title'>{event?.title}</div>
       <div className='subtitle'>
-        {event?.subtitle}
+        {event?.cue}
         {searchParams.get('showField') && event?.[searchParams.get('showField')! as keyof OntimeEvent]
           ? ` - ${event?.[searchParams.get('showField')! as keyof OntimeEvent]}`
           : ''}

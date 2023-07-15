@@ -26,12 +26,19 @@
 
   .eventId {  
     margin-left:$element-spacing;
+    margin-right:$element-spacing;
+  }
+  .cue {  
+    margin-left:$element-spacing;
   }
 }
 
 .eventActions {
   grid-area: eventActions;
   margin-left: auto;
+  & > * {
+    margin-left: 1rem;
+  }
 }
 
 .timeOptions {

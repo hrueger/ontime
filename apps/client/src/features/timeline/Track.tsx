@@ -23,7 +23,7 @@ export default function Track(props: TrackProps) {
             }}
           >
             <div className={style.event} style={{ backgroundColor: entry.event.colour }}>
-              {entry.event.title}
+              {entry.event.cue} | {entry.event.title}
               <br />
               {formatTime(entry.event.timeStart)} - {formatTime(entry.event.timeEnd)}
             </div>

@@ -1,4 +1,4 @@
-import { Loaded, OntimeEvent, TitleBlock } from 'ontime-types';
+import { Loaded, OntimeEvent, OntimeRundown, TitleBlock } from 'ontime-types';
 
 import { DataProvider } from '../data-provider/DataProvider.js';
 import { getRollTimers } from '../../services/rollUtils.js';
@@ -83,6 +83,16 @@ export class EventLoader {
   static getEventWithId(eventId) {
     const timedEvents = EventLoader.getTimedEvents();
     return timedEvents.find((event) => event.id === eventId);
+  }
+
+  /**
+   * returns events given their cue
+   * @param {string} cue
+   * @return {object | undefined}
+   */
+  static getEventsWithCue(cue) {
+    const timedEvents = EventLoader.getTimedEvents();
+    return timedEvents.filter((event) => event.cue === cue);
   }
 
   /**
@@ -266,7 +276,8 @@ export class EventLoader {
   private _loadTitlesNow(event, rundown) {
     // private title is always current
     // check if current is also public
-    if (event.isPublic) {
+    // ToDo: replace with actual logic
+    if (!event.department) {
       this._loadThisTitles(event, 'now');
     } else {
       this._loadThisTitles(event, 'now-private');
@@ -280,7 +291,8 @@ export class EventLoader {
 
       // iterate backwards to find it
       for (let i = this.loaded.selectedEventIndex; i >= 0; i--) {
-        if (rundown[i].isPublic) {
+        // ToDo: replace with actual logic
+        if (!rundown[i].department) {
           this._loadThisTitles(rundown[i], 'now-public');
           break;
         }
@@ -292,7 +304,7 @@ export class EventLoader {
    * @description look for next titles to load
    * @private
    */
-  private _loadTitlesNext(rundown) {
+  private _loadTitlesNext(rundown: OntimeRundown) {
     // maybe there is nothing to load
     if (this.loaded.selectedEventIndex === null) return;
 
@@ -317,7 +329,8 @@ export class EventLoader {
         }
 
         // if event is public
-        if (rundown[i].isPublic) {
+        // ToDo: replace with actual logic
+        if (!rundown[i].department) {
           this._loadThisTitles(rundown[i], 'next-public');
           nextPublic = true;
         }

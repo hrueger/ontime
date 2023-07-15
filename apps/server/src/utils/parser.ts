@@ -313,6 +313,7 @@ export const validateEvent = (eventArgs) => {
 
     event = {
       ...d,
+      cue: makeString(e.cue, d.cue),
       title: makeString(e.title, d.title),
       subtitle: makeString(e.subtitle, d.subtitle),
       presenter: makeString(e.presenter, d.presenter),

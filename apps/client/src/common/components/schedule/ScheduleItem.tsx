@@ -27,7 +27,7 @@ export default function ScheduleItem(props: ScheduleItemProps) {
         <small className='color-fg-muted asterisk'>{event.department}</small>
       </div>
       <div className='entry-times'>
-        {event.subtitle} | {`${start} → ${end}`}
+        {event.cue} | {`${start} → ${end}`}
         <small>
           {searchParams.get('showField') && event?.[searchParams.get('showField')! as keyof OntimeEvent]
             ? ` - ${event?.[searchParams.get('showField')! as keyof OntimeEvent]}`

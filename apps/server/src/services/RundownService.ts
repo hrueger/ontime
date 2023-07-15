@@ -62,7 +62,8 @@ const isNewNext = () => {
       if (event.id === nextPublic) {
         break;
       }
-      if (event.isPublic) {
+      // ToDo: replace with actual logic
+      if (event.department) {
         foundNew = true;
         break;
       }

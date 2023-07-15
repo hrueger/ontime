@@ -185,7 +185,20 @@ export function dispatchFromAdapter(type: string, payload: unknown, source?: 'os
       try {
         PlaybackService.loadById(payload.toString().toLowerCase());
       } catch (error) {
-        throw new Error(`OSC IN: error calling goto ${error}`);
+        throw new Error(`OSC IN: error calling goto id ${error}`);
+      }
+      break;
+    }
+
+    case 'gotocue': {
+      if (!payload) {
+        throw new Error(`Cue not recognised: ${payload}`);
+      }
+
+      try {
+        PlaybackService.loadByCue(payload.toString().toLowerCase());
+      } catch (error) {
+        throw new Error(`OSC IN: error calling goto cue ${error}`);
       }
       break;
     }

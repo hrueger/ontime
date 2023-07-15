@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { OntimeEvent } from 'ontime-types';
 
 import CopyTag from '../../common/components/copy-tag/CopyTag';
+import InputCopyTag from '../../common/components/input-copy-tag/InputCopyTag';
+import { useEventAction } from '../../common/hooks/useEventAction';
 import useRundown from '../../common/hooks-query/useRundown';
 import { useAppMode } from '../../common/stores/appModeStore';
 import getDelayTo from '../../common/utils/getDelayTo';
@@ -34,6 +36,12 @@ export default function EventEditor() {
     }
   }, [data, event, openId]);
 
+  const { updateEvent } = useEventAction();
+
+  const handleSubmit = (eventId: string) => (value: string) => {
+    updateEvent({ id: eventId, cue: value });
+  };
+
   if (!event) {
     return <span>Loading...</span>;
   }
@@ -45,9 +53,14 @@ export default function EventEditor() {
         <span className={style.eventId}>
           <CopyTag label={event.id}>{event.id}</CopyTag>
         </span>
+        Cue
+        <span className={style.cue}>
+          <InputCopyTag label={event.cue} initialValue={event.cue} submitHandler={handleSubmit(event.id)} />
+        </span>
       </div>
       <div className={style.eventActions}>
-        <CopyTag label='OSC trigger'>{`/ontime/gotoid/${event.id}`}</CopyTag>
+        <CopyTag label='OSC trigger ID'>{`/ontime/gotoid/${event.id}`}</CopyTag>
+        {event.cue && <CopyTag label='OSC trigger CUE'>{`/ontime/gotocue/${event.cue}`}</CopyTag>}
       </div>
       <EventEditorTimes
         eventId={event.id}

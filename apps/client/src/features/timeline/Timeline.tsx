@@ -99,11 +99,16 @@ export default function Timeline() {
             } as React.CSSProperties
           }
         >
-          <TrackHeader start={earliestEvent!.timeStart} end={latestEvent!.timeEnd} length={totalLength!} />
+          {false && <TrackHeader start={earliestEvent!.timeStart} end={latestEvent!.timeEnd} length={totalLength!} />}
           {[{ id: '', enabled: true, name: 'General' }].concat(departments || []).map((department) => (
             <div className={style.trackLabelContainer} key={department.id}>
               <span className={style.trackLabel}>{department.name}</span>
-              <Track items={mappedEvents.filter((e) => e.event.department === department.id)} key={department.id} />
+              <Track
+                items={mappedEvents.filter(
+                  (e) => (!department.id && !e.event.department) || e.event.department === department.id,
+                )}
+                key={department.id}
+              />
             </div>
           ))}
         </div>
