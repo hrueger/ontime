@@ -87,6 +87,10 @@
     padding: 16px 24px;
     border-radius: 8px;
   }
+  
+  .blink {
+    animation: blink 0.5s ease-in-out 3;
+  }
 
   .timer-group {
     grid-area: timer;
@@ -147,5 +151,19 @@
       padding: 4px;
       background-color: white;
     }
+  }
+}
+
+    
+
+@keyframes blink {
+  30% {
+    background-color: var(--card-background-color-override, $viewer-card-bg-color);
+  }
+  50% {
+    background-color: rgb(130, 130, 0);
+  }
+  70% {
+    background-color: var(--card-background-color-override, $viewer-card-bg-color);
   }
 }

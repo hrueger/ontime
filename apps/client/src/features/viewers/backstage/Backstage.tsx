@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import QRCode from 'react-qr-code';
 import { useSearchParams } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -51,10 +51,17 @@ export default function Backstage(props: BackstageProps) {
   const { data: departments } = useDepartments();
   const [searchParams] = useSearchParams();
 
+  const [blinkClass, setBlinkClass] = useState(true);
   // Set window title
   useEffect(() => {
     document.title = 'ontime - Backstage Screen';
   }, []);
+  useEffect(() => {
+    setBlinkClass(false);
+    setTimeout(() => {
+      setBlinkClass(true);
+    }, 100);
+  }, [selectedId]);
 
   // defer rendering until we load stylesheets
   if (!shouldRender) {
@@ -112,7 +119,7 @@ export default function Backstage(props: BackstageProps) {
         <AnimatePresence>
           {title.showNow && (
             <motion.div
-              className='event now'
+              className={`event now ${blinkClass ? 'blink' : ''}`}
               key='now'
               variants={titleVariants}
               initial='hidden'
@@ -141,7 +148,7 @@ export default function Backstage(props: BackstageProps) {
         <AnimatePresence>
           {title.showNext && (
             <motion.div
-              className='event next'
+              className={`event next ${blinkClass ? 'blink' : ''}`}
               key='next'
               variants={titleVariants}
               initial='hidden'
