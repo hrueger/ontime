@@ -6,6 +6,7 @@ import { Settings } from './core/Settings.type.js';
 import { UserFields } from './core/UserFields.type.js';
 import { ViewSettings } from './core/Views.type.js';
 import { Departments } from './core/Department.type.js';
+import { SheetsSyncSettings } from './core/SheetsSyncSettings.type.js';
 
 export type DatabaseModel = {
   rundown: OntimeRundown;
@@ -16,4 +17,5 @@ export type DatabaseModel = {
   userFields: UserFields;
   departments: Departments;
   osc: OSCSettings;
+  sheetsSync: SheetsSyncSettings;
 };

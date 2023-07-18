@@ -12,6 +12,7 @@ import {
 } from './definitions/core/OntimeEvent.type.js';
 import { OntimeRundown, OntimeRundownEntry } from './definitions/core/Rundown.type.js';
 import { OSCSettings, OscSubscription, OscSubscriptionOptions } from './definitions/core/OscSettings.type.js';
+import { SheetsSyncSettings } from './definitions/core/SheetsSyncSettings.type.js';
 import { Playback } from './definitions/runtime/Playback.type.js';
 import { Loaded } from './definitions/runtime/Playlist.type.js';
 import { Log, LogLevel, LogMessage } from './definitions/runtime/Logger.type.js';
@@ -55,6 +56,9 @@ export type { Department, Departments };
 
 // ---> OSC
 export type { OscSubscription, OSCSettings, OscSubscriptionOptions };
+
+// ---> Sheets Sync
+export type { SheetsSyncSettings };
 
 // ---> HTTP
 

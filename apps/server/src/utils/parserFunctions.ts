@@ -8,6 +8,7 @@ import {
   OscSubscription,
   OscSubscriptionOptions,
   Settings,
+  SheetsSyncSettings,
   TimerLifeCycle,
   TimerType,
   UserFields,
@@ -236,6 +237,34 @@ export const parseOsc = (data: { osc?: Partial<OSCSettings> }, enforce: boolean)
     console.log('Created OSC object in db');
     return { ...dbModel.osc };
   } else return {};
+};
+/**
+ * Parse osc portion of an entry
+ */
+export const parseSheetsSync = (
+  data: { sheetsSync?: Partial<SheetsSyncSettings> },
+  enforce: boolean,
+): SheetsSyncSettings => {
+  if ('sheetsSync' in data) {
+    console.log('Found sheets sync definition, importing...');
+
+    const loadedConfig = data?.sheetsSync || {};
+    return {
+      enabled: loadedConfig.enabled ?? dbModel.sheetsSync.enabled,
+      apiKey: loadedConfig.apiKey ?? dbModel.sheetsSync.apiKey,
+      sheetId: loadedConfig.sheetId ?? dbModel.sheetsSync.sheetId,
+      sheetName: loadedConfig.sheetName ?? dbModel.sheetsSync.sheetName,
+    };
+  } else if (enforce) {
+    console.log('Created sheets sync object in db');
+    return { ...dbModel.sheetsSync };
+  } else
+    return {
+      enabled: false,
+      apiKey: '',
+      sheetId: '',
+      sheetName: '',
+    };
 };
 
 /**

@@ -7,6 +7,7 @@ import { IoHelp } from '@react-icons/all-files/io5/IoHelp';
 import { IoOptions } from '@react-icons/all-files/io5/IoOptions';
 import { IoPlay } from '@react-icons/all-files/io5/IoPlay';
 import { IoPushOutline } from '@react-icons/all-files/io5/IoPushOutline';
+import { IoRefreshOutline } from '@react-icons/all-files/io5/IoRefreshOutline';
 import { IoSaveOutline } from '@react-icons/all-files/io5/IoSaveOutline';
 import { IoSettingsOutline } from '@react-icons/all-files/io5/IoSettingsOutline';
 
@@ -24,6 +25,8 @@ interface MenuBarProps {
   onSettingsClose: () => void;
   isUploadOpen: boolean;
   onUploadOpen: () => void;
+  isSyncOpen: boolean;
+  onSyncOpen: () => void;
   isIntegrationOpen: boolean;
   onIntegrationOpen: () => void;
   isAboutOpen: boolean;
@@ -55,6 +58,8 @@ const MenuBar = (props: MenuBarProps) => {
     onSettingsClose,
     isUploadOpen,
     onUploadOpen,
+    isSyncOpen,
+    onSyncOpen,
     isIntegrationOpen,
     onIntegrationOpen,
     isAboutOpen,
@@ -126,6 +131,16 @@ const MenuBar = (props: MenuBarProps) => {
         clickHandler={onUploadOpen}
         tooltip='Import project file'
         aria-label='Import project file'
+        size='sm'
+      />
+      <TooltipActionBtn
+        {...buttonStyle}
+        {...(appMode === AppMode.Run ? hiddenStyle : {})}
+        icon={<IoRefreshOutline />}
+        className={isSyncOpen ? style.open : ''}
+        clickHandler={onSyncOpen}
+        tooltip='Sync project file'
+        aria-label='Sync project file'
         size='sm'
       />
       <TooltipActionBtn

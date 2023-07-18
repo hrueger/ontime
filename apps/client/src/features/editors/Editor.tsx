@@ -5,6 +5,7 @@ import ErrorBoundary from '../../common/components/error-boundary/ErrorBoundary'
 import MenuBar from '../menu/MenuBar';
 import AboutModal from '../modals/about-modal/AboutModal';
 import QuickStart from '../modals/quick-start/QuickStart';
+import SyncModal from '../modals/sync-modal/SyncModal';
 import UploadModal from '../modals/upload-modal/UploadModal';
 
 import styles from './Editor.module.scss';
@@ -22,6 +23,7 @@ const SettingsModal = lazy(() => import('../modals/settings-modal/SettingsModal'
 export default function Editor() {
   const { isOpen: isSettingsOpen, onOpen: onSettingsOpen, onClose: onSettingsClose } = useDisclosure();
   const { isOpen: isUploadModalOpen, onOpen: onUploadModalOpen, onClose: onUploadModalClose } = useDisclosure();
+  const { isOpen: isSyncModalOpen, onOpen: onSyncModalOpen, onClose: onSyncModalClose } = useDisclosure();
   const {
     isOpen: isIntegrationModalOpen,
     onOpen: onIntegrationModalOpen,
@@ -40,6 +42,7 @@ export default function Editor() {
       <ErrorBoundary>
         <QuickStart onClose={onQuickStartClose} isOpen={isQuickStartOpen} />
         <UploadModal onClose={onUploadModalClose} isOpen={isUploadModalOpen} />
+        <SyncModal onClose={onSyncModalClose} isOpen={isSyncModalOpen} />
         <IntegrationModal onClose={onIntegrationModalClose} isOpen={isIntegrationModalOpen} />
         <AboutModal onClose={onAboutModalClose} isOpen={isAboutModalOpen} />
         <SettingsModal isOpen={isSettingsOpen} onClose={onSettingsClose} />
@@ -53,6 +56,8 @@ export default function Editor() {
               onSettingsClose={onSettingsClose}
               isUploadOpen={isUploadModalOpen}
               onUploadOpen={onUploadModalOpen}
+              isSyncOpen={isSyncModalOpen}
+              onSyncOpen={onSyncModalOpen}
               isIntegrationOpen={isIntegrationModalOpen}
               onIntegrationOpen={onIntegrationModalOpen}
               isAboutOpen={isAboutModalOpen}

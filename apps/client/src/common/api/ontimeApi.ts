@@ -6,6 +6,7 @@ import {
   OSCSettings,
   OscSubscription,
   Settings,
+  SheetsSyncSettings,
   UserFields,
   ViewSettings,
 } from 'ontime-types';
@@ -30,6 +31,14 @@ export async function getSettings(): Promise<Settings> {
  */
 export async function postSettings(data: Settings) {
   return axios.post(`${ontimeURL}/settings`, data);
+}
+
+/**
+ * @description HTTP request to mutate application settings
+ * @return {Promise}
+ */
+export async function postSync() {
+  return axios.post(`${ontimeURL}/sync`);
 }
 
 /**
@@ -119,11 +128,28 @@ export async function getOSC(): Promise<OSCSettings> {
 }
 
 /**
+ * @description HTTP request to retrieve osc settings
+ * @return {Promise}
+ */
+export async function getSheetsSyncSettings(): Promise<SheetsSyncSettings> {
+  const res = await axios.get(`${ontimeURL}/sheets-sync`);
+  return res.data;
+}
+
+/**
  * @description HTTP request to mutate osc settings
  * @return {Promise}
  */
 export async function postOSC(data: OSCSettings) {
   return axios.post(`${ontimeURL}/osc`, data);
+}
+
+/**
+ * @description HTTP request to mutate osc settings
+ * @return {Promise}
+ */
+export async function postSheetsSyncSettings(data: SheetsSyncSettings) {
+  return axios.post(`${ontimeURL}/sheets-sync`, data);
 }
 
 /**

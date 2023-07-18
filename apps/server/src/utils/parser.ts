@@ -1,5 +1,4 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck -- not ready to fully type
 
 import fs from 'fs';
 import xlsx from 'node-xlsx';
@@ -14,6 +13,7 @@ import {
   parseOsc,
   parseRundown,
   parseSettings,
+  parseSheetsSync,
   parseUserFields,
   parseViewSettings,
 } from './parserFunctions.js';
@@ -284,6 +284,8 @@ export const parseJson = async (jsonData, enforce = false): Promise<DatabaseMode
   // Import OSC settings if any
   // @ts-expect-error -- we are unable to type just yet
   returnData.osc = parseOsc(jsonData, enforce);
+  // Import sheets sync settings if any
+  returnData.sheetsSync = parseSheetsSync(jsonData, enforce);
   // Import HTTP settings if any
   // returnData.http = parseHttp(jsonData, enforce);
 
@@ -356,7 +358,7 @@ type ResponseError = { error: true; message: string };
  * @param {string} file - reference to file
  * @return {object} - parse result message
  */
-export const fileHandler = async (file): ResponseOK | ResponseError => {
+export const fileHandler = async (file): Promise<ResponseOK | ResponseError> => {
   let res: Partial<ResponseOK | ResponseError> = {};
 
   // check which file type are we dealing with
@@ -369,10 +371,10 @@ export const fileHandler = async (file): ResponseOK | ResponseError => {
       // we only look at worksheets called ontime or event schedule
       if (excelData?.data) {
         const dataFromExcel = await parseExcel(excelData.data);
-        res.data = {};
-        res.data.rundown = parseRundown(dataFromExcel);
-        res.data.eventData = parseEventData(dataFromExcel, true);
-        res.data.userFields = parseUserFields(dataFromExcel);
+        (res as any).data = {};
+        (res as any).data.rundown = parseRundown(dataFromExcel);
+        (res as any).data.eventData = parseEventData(dataFromExcel, true);
+        (res as any).data.userFields = parseUserFields(dataFromExcel);
         res.message = 'success';
       } else {
         const errorMessage = 'No sheet found named ontime or event schedule';
@@ -393,14 +395,14 @@ export const fileHandler = async (file): ResponseOK | ResponseError => {
     let uploadedJson = null;
 
     try {
-      uploadedJson = JSON.parse(rawdata);
+      uploadedJson = JSON.parse(rawdata as any);
     } catch (error) {
       return { error: true, message: 'Error parsing JSON file' };
     }
 
     if (uploadedJson.settings.version === 2) {
       try {
-        res.data = await parseJson(uploadedJson);
+        (res as any).data = (await parseJson(uploadedJson)) as any;
         res.message = 'success';
       } catch (error) {
         res = { error: true, message: `Error parsing file: ${error}` };
@@ -412,5 +414,5 @@ export const fileHandler = async (file): ResponseOK | ResponseError => {
 
   // delete file
   await deleteFile(file);
-  return res;
+  return res as any;
 };

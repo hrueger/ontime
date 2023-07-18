@@ -11,6 +11,8 @@ import { resolveDbPath } from '../setup.js';
 import { oscIntegration } from '../services/integration-service/OscIntegration.js';
 import { logger } from '../classes/Logger.js';
 import { deleteAllEvents, forceReset } from '../services/RundownService.js';
+import { getSheetRundownData } from '../utils/google-sheets.js';
+import { sendRefetch } from '../adapters/websocketAux.js';
 
 // Create controller for GET request to '/ontime/poll'
 // Returns data for current state
@@ -67,7 +69,7 @@ const uploadAndParse = async (file, req, res, options) => {
         if (options?.onlyRundown === 'true') {
           await DataProvider.setRundown(newRundown);
         } else {
-          await DataProvider.mergeIntoData(result.data);
+          await DataProvider.mergeIntoData(result.data as any);
         }
       }
       forceReset();
@@ -245,6 +247,22 @@ export const postSettings = async (req, res) => {
   }
 };
 
+// Create controller for POST request to '/ontime/sync'
+// Returns ACK message
+export const postSync = async (req, res) => {
+  // if (failEmptyObjects(req.body, res)) {
+  //   return;
+  // }
+  try {
+    const settings = DataProvider.getSheetsSyncSettings();
+    DataProvider.setRundown(await getSheetRundownData(settings));
+    res.status(200).send();
+    sendRefetch();
+  } catch (error) {
+    res.status(400).send(error);
+  }
+};
+
 /**
  * @description Get view Settings
  * @method GET
@@ -285,6 +303,26 @@ export const postViewSettings = async (req, res) => {
 export const getOSC = async (req, res) => {
   const osc = DataProvider.getOsc();
   res.status(200).send(osc);
+};
+
+export const postSheetsSyncSettings = async (req, res) => {
+  if (failEmptyObjects(req.body, res)) {
+    return;
+  }
+
+  try {
+    await DataProvider.setSheetsSyncSettings(req.body);
+    res.status(200).send(req.body);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+};
+
+// Create controller for GET request to '/ontime/sheets-sync'
+// Returns -
+export const getSheetsSyncSettings = async (req, res) => {
+  const sheetsSyncSettings = DataProvider.getSheetsSyncSettings();
+  res.status(200).send(sheetsSyncSettings);
 };
 
 export const postOscSubscriptions = async (req, res) => {

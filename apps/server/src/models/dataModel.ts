@@ -66,4 +66,10 @@ export const dbModel: DatabaseModel = {
     },
   },
   departments: [],
+  sheetsSync: {
+    enabled: false,
+    sheetId: '',
+    sheetName: '',
+    apiKey: '',
+  },
 };

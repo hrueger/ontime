@@ -2,6 +2,7 @@ import { ModalBody, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/r
 
 import ModalWrapper from '../ModalWrapper';
 
+import GoogleSheetsSync from './GoogleSheetsSync';
 import OscIntegration from './OscIntegration';
 import OscSettings from './OscSettings';
 
@@ -30,6 +31,7 @@ export default function IntegrationModal(props: IntegrationModalProps) {
           <TabList>
             <Tab>OSC</Tab>
             <Tab>OSC Integration</Tab>
+            <Tab>Google Sheets Sync</Tab>
           </TabList>
           <TabPanels>
             <TabPanel>
@@ -37,6 +39,9 @@ export default function IntegrationModal(props: IntegrationModalProps) {
             </TabPanel>
             <TabPanel>
               <OscIntegration />
+            </TabPanel>
+            <TabPanel>
+              <GoogleSheetsSync />
             </TabPanel>
           </TabPanels>
         </Tabs>

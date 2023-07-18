@@ -2,7 +2,7 @@
  * Class Event Provider is a mediator for handling the local db
  * and adds logic specific to ontime data
  */
-import { EventData, SupportedEvent, ViewSettings } from 'ontime-types';
+import { DatabaseModel, EventData, SheetsSyncSettings, SupportedEvent, ViewSettings } from 'ontime-types';
 
 import { data, db } from '../../modules/loadDb.js';
 import { safeMerge } from './DataProvider.utils.js';
@@ -122,6 +122,10 @@ export class DataProvider {
     return data.osc;
   }
 
+  static getSheetsSyncSettings() {
+    return data.sheetsSync || { enabled: false, sheetId: '', sheetName: '', apiKey: '' };
+  }
+
   static getAliases() {
     return data.aliases;
   }
@@ -156,6 +160,10 @@ export class DataProvider {
     data.departments = [...newData];
     await this.persist();
   }
+  static async setSheetsSyncSettings(newData: SheetsSyncSettings) {
+    data.sheetsSync = { ...newData };
+    await this.persist();
+  }
 
   static async setOsc(newData) {
     data.osc = { ...newData };
@@ -171,8 +179,8 @@ export class DataProvider {
     await db.write();
   }
 
-  static async mergeIntoData(newData) {
-    const mergedData = safeMerge(data, newData);
+  static async mergeIntoData(newData: DatabaseModel) {
+    const mergedData = safeMerge(data, newData) as DatabaseModel;
     data.eventData = mergedData.eventData;
     data.settings = mergedData.settings;
     data.viewSettings = mergedData.viewSettings;
@@ -180,6 +188,7 @@ export class DataProvider {
     data.aliases = mergedData.aliases;
     data.userFields = mergedData.userFields;
     data.rundown = mergedData.rundown;
+    data.sheetsSync = mergedData.sheetsSync;
     await this.persist();
   }
 }
