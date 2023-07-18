@@ -44,6 +44,10 @@ const buttonStyle = {
   },
 };
 
+const hiddenStyle = {
+  visibility: 'hidden' as const,
+};
+
 const MenuBar = (props: MenuBarProps) => {
   const {
     isSettingsOpen,
@@ -107,6 +111,7 @@ const MenuBar = (props: MenuBarProps) => {
       <div className={style.gap} />
       <TooltipActionBtn
         {...buttonStyle}
+        {...(appMode === AppMode.Run ? hiddenStyle : {})}
         icon={<IoColorWand />}
         className={isQuickStartOpen ? style.open : ''}
         clickHandler={onQuickStartOpen}
@@ -115,6 +120,7 @@ const MenuBar = (props: MenuBarProps) => {
       />
       <TooltipActionBtn
         {...buttonStyle}
+        {...(appMode === AppMode.Run ? hiddenStyle : {})}
         icon={<IoPushOutline />}
         className={isUploadOpen ? style.open : ''}
         clickHandler={onUploadOpen}
@@ -124,6 +130,7 @@ const MenuBar = (props: MenuBarProps) => {
       />
       <TooltipActionBtn
         {...buttonStyle}
+        {...(appMode === AppMode.Run ? hiddenStyle : {})}
         icon={<IoSaveOutline />}
         clickHandler={downloadRundown}
         tooltip='Export project file'
@@ -154,6 +161,7 @@ const MenuBar = (props: MenuBarProps) => {
       <div className={style.gap} />
       <TooltipActionBtn
         {...buttonStyle}
+        {...(appMode === AppMode.Run ? hiddenStyle : {})}
         icon={isIntegrationOpen ? <IoExtensionPuzzle /> : <IoExtensionPuzzleOutline />}
         className={isIntegrationOpen ? style.open : ''}
         clickHandler={onIntegrationOpen}
@@ -163,6 +171,7 @@ const MenuBar = (props: MenuBarProps) => {
       />
       <TooltipActionBtn
         {...buttonStyle}
+        {...(appMode === AppMode.Run ? hiddenStyle : {})}
         icon={<IoSettingsOutline />}
         className={isSettingsOpen ? style.open : ''}
         clickHandler={onSettingsOpen}
