@@ -167,6 +167,7 @@ export default function RundownEntry(props: RundownEntryProps) {
         title={data.title}
         note={data.note}
         department={data.department}
+        cue={data.cue}
         delay={delay}
         previousEnd={previousEnd}
         colour={data.colour}

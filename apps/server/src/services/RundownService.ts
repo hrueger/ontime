@@ -22,8 +22,8 @@ export function forceReset() {
 const affectedLoaded = (affectedIds: string[]) => {
   const now = eventLoader.loaded.selectedEventId;
   const nowPublic = eventLoader.loaded.selectedPublicEventId;
-  const next = eventLoader.loaded.nextEventId;
-  const nextPublic = eventLoader.loaded.nextPublicEventId;
+  const next = eventLoader.loaded.nextEventCue;
+  const nextPublic = eventLoader.loaded.nextPublicEventCue;
   return (
     affectedIds.includes(now) ||
     affectedIds.includes(nowPublic) ||
@@ -38,7 +38,7 @@ const affectedLoaded = (affectedIds: string[]) => {
 const isNewNext = () => {
   const timedEvents = EventLoader.getTimedEvents();
   const now = eventLoader.loaded.selectedEventId;
-  const next = eventLoader.loaded.nextEventId;
+  const next = eventLoader.loaded.nextEventCue;
 
   // check whether the index of now and next are consecutive
   const indexNow = timedEvents.findIndex((event) => event.id === now);
@@ -49,7 +49,7 @@ const isNewNext = () => {
   }
   // iterate through timed events and see if there are public events between nowPublic and nextPublic
   const nowPublic = eventLoader.loaded.selectedPublicEventId;
-  const nextPublic = eventLoader.loaded.nextPublicEventId;
+  const nextPublic = eventLoader.loaded.nextPublicEventCue;
 
   let foundNew = false;
   let isAfter = false;

@@ -3,6 +3,6 @@ export type Loaded = {
   selectedEventIndex: number | null;
   selectedEventId: string | null;
   selectedPublicEventId: string | null;
-  nextEventId: string | null;
-  nextPublicEventId: string | null;
+  nextEventCue: string | null;
+  nextPublicEventCue: string | null;
 };

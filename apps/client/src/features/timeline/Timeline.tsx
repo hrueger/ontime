@@ -3,6 +3,7 @@ import { FiZoomIn } from '@react-icons/all-files/fi/FiZoomIn';
 import { FiZoomOut } from '@react-icons/all-files/fi/FiZoomOut';
 import { OntimeEvent } from 'ontime-types';
 
+import { useRundownEditor } from '../../common/hooks/useSocket';
 import useDepartments from '../../common/hooks-query/useDepartments';
 import useRundown from '../../common/hooks-query/useRundown';
 import { filterEvents } from '../../common/utils/eventFilter';
@@ -17,6 +18,7 @@ export default function Timeline() {
   const [zoomFactor, setZoomFactor] = useState(1);
   const [verticalZoomFactor, setVerticalZoomFactor] = useState(1);
   const { data: departments } = useDepartments();
+  const featureData = useRundownEditor();
 
   if (data.length === 0) return null;
 
@@ -107,7 +109,11 @@ export default function Timeline() {
             return (
               <div className={style.trackLabelContainer} key={department.id}>
                 <span className={style.trackLabel}>{department.name}</span>
-                <Track items={mappedEvents} key={department.id} />
+                <Track
+                  items={mappedEvents}
+                  key={department.id}
+                  runningCue={data.find((e) => e.id === featureData?.selectedEventId)?.cue}
+                />
               </div>
             );
           })}

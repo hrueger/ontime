@@ -231,8 +231,9 @@ export default function Rundown(props: RundownProps) {
                 previousEventId = entry.id;
               }
               const isLast = index === entries.length - 1;
-              const isSelected = featureData?.selectedEventId === entry.id;
-              const isNext = featureData?.nextEventId === entry.id;
+              const selectedEvent = statefulEntries.find((e) => e.id === featureData?.selectedEventId);
+              const isSelected = selectedEvent?.cue === entry.cue;
+              const isNext = featureData?.nextEventCue === entry.cue;
               const hasCursor = entry.id === cursor;
               if (isSelected) {
                 isPast = false;

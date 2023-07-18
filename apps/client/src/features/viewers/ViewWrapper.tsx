@@ -26,7 +26,7 @@ const withData = <P extends object>(Component: ComponentType<P>) => {
     const { timer, titles, titlesPublic, publicMessage, timerMessage, lowerMessage, playback, onAir } = data;
     const publicSelectedId = data.loaded.selectedPublicEventId;
     const selectedId = data.loaded.selectedEventId;
-    const nextId = data.loaded.nextEventId;
+    const nextCue = data.loaded.nextEventCue;
 
     /********************************************/
     /***  + titleManager                      ***/
@@ -96,7 +96,7 @@ const withData = <P extends object>(Component: ComponentType<P>) => {
         selectedId={selectedId}
         publicSelectedId={publicSelectedId}
         viewSettings={viewSettings}
-        nextId={nextId}
+        nextCue={nextCue}
         general={eventData}
         onAir={onAir}
       />

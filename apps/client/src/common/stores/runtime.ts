@@ -39,8 +39,8 @@ export const runtimeStorePlaceholder: RuntimeStore = {
     selectedEventIndex: null,
     selectedEventId: null,
     selectedPublicEventId: null,
-    nextEventId: null,
-    nextPublicEventId: null,
+    nextEventCue: null,
+    nextPublicEventCue: null,
   },
   titles: {
     eventNow: null,

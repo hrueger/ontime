@@ -41,6 +41,7 @@ interface EventBlockInnerProps {
   department: string;
   endAction: EndAction;
   timerType: TimerType;
+  cue: string;
   title: string;
   note: string;
   delay: number;
@@ -66,6 +67,7 @@ const EventBlockInner = (props: EventBlockInnerProps) => {
     timerType,
     title,
     note,
+    cue,
     delay,
     previousEnd,
     next,
@@ -148,6 +150,7 @@ const EventBlockInner = (props: EventBlockInnerProps) => {
         </div>
       </div>
       <div className={style.eventActions}>
+        <span>{cue}</span>
         <TooltipActionBtn
           {...blockBtnStyle}
           variant='ontime-subtle-white'

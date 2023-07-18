@@ -98,7 +98,7 @@ export class EventLoader {
   /**
    * loads an event given its id
    * @param {string} eventId
-   * @returns {{loadedEvent: null, selectedEventId: null, nextEventId: null, selectedPublicEventId: null, nextPublicEventId: null, numEvents: null, titles: {presenterNext: null, titleNow: null, subtitleNow: null, titleNext: null, subtitleNext: null, presenterNow: null, noteNow: null, noteNext: null}, titlesPublic: {presenterNext: null, titleNow: null, subtitleNow: null, titleNext: null, subtitleNext: null, presenterNow: null}, selectedEventIndex: null}}
+   * @returns {{loadedEvent: null, selectedEventId: null, nextEventCue: null, selectedPublicEventId: null, nextPublicEventCue: null, numEvents: null, titles: {presenterNext: null, titleNow: null, subtitleNow: null, titleNext: null, subtitleNext: null, presenterNow: null, noteNow: null, noteNext: null}, titlesPublic: {presenterNext: null, titleNow: null, subtitleNow: null, titleNext: null, subtitleNext: null, presenterNow: null}, selectedEventIndex: null}}
    */
   loadById(eventId) {
     const event = EventLoader.getEventWithId(eventId);
@@ -108,7 +108,7 @@ export class EventLoader {
   /**
    * loads an event given its index
    * @param {number} eventIndex
-   * @returns {{loadedEvent: null, selectedEventId: null, nextEventId: null, selectedPublicEventId: null, nextPublicEventId: null, numEvents: null, titles: {presenterNext: null, titleNow: null, subtitleNow: null, titleNext: null, subtitleNext: null, presenterNow: null, noteNow: null, noteNext: null}, titlesPublic: {presenterNext: null, titleNow: null, subtitleNow: null, titleNext: null, subtitleNext: null, presenterNow: null}, selectedEventIndex: null}}
+   * @returns {{loadedEvent: null, selectedEventId: null, nextEventCue: null, selectedPublicEventId: null, nextPublicEventCue: null, numEvents: null, titles: {presenterNext: null, titleNow: null, subtitleNow: null, titleNext: null, subtitleNext: null, presenterNow: null, noteNow: null, noteNext: null}, titlesPublic: {presenterNext: null, titleNow: null, subtitleNow: null, titleNext: null, subtitleNext: null, presenterNow: null}, selectedEventIndex: null}}
    */
   loadByIndex(eventIndex) {
     const event = EventLoader.getEventAtIndex(eventIndex);
@@ -148,8 +148,12 @@ export class EventLoader {
     if (this.loaded.selectedEventIndex === null) {
       return timedEvents[0];
     }
-    const newIndex = this.loaded.selectedEventIndex + 1;
-    return timedEvents?.[newIndex];
+    const { cue } = timedEvents[this.loaded.selectedEventIndex];
+    if (cue === undefined) return null;
+    return timedEvents
+      .map((e) => ({ e, c: parseInt(e.cue) }))
+      .sort((a, b) => a.c - b.c)
+      .find((e) => e.c > parseInt(cue))?.e;
   }
 
   /**
@@ -183,7 +187,7 @@ export class EventLoader {
 
   /**
    * returns data for currently loaded event
-   * @returns {{loadedEvent: null, selectedEventId: (null|*), nextEventId: (null|*), selectedPublicEventId: (null|*), nextPublicEventId: (null|*), numEvents: (null|number|*), titles: (*|{presenterNext: null, titleNow: null, subtitleNow: null, titleNext: null, subtitleNext: null, presenterNow: null, noteNow: null, noteNext: null}), titlesPublic: (*|{presenterNext: null, titleNow: null, subtitleNow: null, titleNext: null, subtitleNext: null, presenterNow: null}), selectedEventIndex: (null|number|*)}}
+   * @returns {{loadedEvent: null, selectedEventId: (null|*), nextEventCue: (null|*), selectedPublicEventId: (null|*), nextPublicEventCue: (null|*), numEvents: (null|number|*), titles: (*|{presenterNext: null, titleNow: null, subtitleNow: null, titleNext: null, subtitleNext: null, presenterNow: null, noteNow: null, noteNext: null}), titlesPublic: (*|{presenterNext: null, titleNow: null, subtitleNow: null, titleNext: null, subtitleNext: null, presenterNow: null}), selectedEventIndex: (null|number|*)}}
    */
   getLoaded() {
     return {
@@ -211,8 +215,8 @@ export class EventLoader {
       selectedEventIndex: null,
       selectedEventId: null,
       selectedPublicEventId: null,
-      nextEventId: null,
-      nextPublicEventId: null,
+      nextEventCue: null,
+      nextPublicEventCue: null,
       numEvents: EventLoader.getPlayableEvents().length,
     };
     this.titles = {
@@ -247,7 +251,7 @@ export class EventLoader {
     this.loaded.selectedEventIndex = eventIndex;
     this.loaded.selectedEventId = event.id;
     this.loaded.numEvents = timedEvents.length;
-    // this.nextEventId = playableEvents[eventIndex + 1].id;
+    // this.nextEventCue = playableEvents[eventIndex + 1].cue;
     this._loadTitlesNow(event, playableEvents);
     this._loadTitlesNext(playableEvents);
 
@@ -310,10 +314,10 @@ export class EventLoader {
 
     // assume there is no next event
     this.titles.eventNext = null;
-    this.loaded.nextEventId = null;
+    this.loaded.nextEventCue = null;
 
     this.titlesPublic.eventNext = null;
-    this.loaded.nextPublicEventId = null;
+    this.loaded.nextPublicEventCue = null;
 
     const numEvents = rundown.length;
 
@@ -323,14 +327,17 @@ export class EventLoader {
 
       for (let i = this.loaded.selectedEventIndex + 1; i < numEvents; i++) {
         // if we have not set private
-        if (!nextPrivate) {
+        if (!nextPrivate && parseInt(rundown[i].cue) >= parseInt(rundown[this.loaded.selectedEventIndex].cue) + 1) {
           this._loadThisTitles(rundown[i], 'next-private');
           nextPrivate = true;
         }
 
         // if event is public
         // ToDo: replace with actual logic
-        if (!rundown[i].department) {
+        if (
+          !rundown[i].department &&
+          parseInt(rundown[i].cue) >= parseInt(rundown[this.loaded.selectedEventIndex].cue) + 1
+        ) {
           this._loadThisTitles(rundown[i], 'next-public');
           nextPublic = true;
         }
@@ -378,21 +385,21 @@ export class EventLoader {
       case 'next':
         // public
         this.titlesPublic.eventNext = event;
-        this.loaded.nextPublicEventId = event.id;
+        this.loaded.nextPublicEventCue = event.cue;
 
         // private
         this.titles.eventNext = event;
-        this.loaded.nextEventId = event.id;
+        this.loaded.nextEventCue = event.cue;
         break;
 
       case 'next-public':
         this.titlesPublic.eventNext = event;
-        this.loaded.nextPublicEventId = event.id;
+        this.loaded.nextPublicEventCue = event.cue;
         break;
 
       case 'next-private':
         this.titles.eventNext = event;
-        this.loaded.nextEventId = event.id;
+        this.loaded.nextEventCue = event.cue;
         break;
 
       default:

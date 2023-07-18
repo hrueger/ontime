@@ -29,6 +29,24 @@ $track-height: 8rem;
         height: 100%;
         overflow: hidden;
         border-radius: 0.5rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .event-running {
+        border: 3px solid red;
+        color: black;
+        height: 100%;
+        overflow: hidden;
+        border-radius: 0.5rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .progressbar {
+        height: 5px;
+        background-color: black;
+        margin: 0 0.2rem;
       }
     }
   }

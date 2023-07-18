@@ -31,6 +31,7 @@ interface EventBlockProps {
   delay: number;
   previousEnd: number;
   colour: string;
+  cue: string;
   isPast: boolean;
   next: boolean;
   skip: boolean;
@@ -67,6 +68,7 @@ export default function EventBlock(props: EventBlockProps) {
     colour,
     isPast,
     next,
+    cue,
     skip = false,
     selected,
     hasCursor,
@@ -175,6 +177,7 @@ export default function EventBlock(props: EventBlockProps) {
           timerType={timerType}
           title={title}
           note={note}
+          cue={cue}
           delay={delay}
           previousEnd={previousEnd}
           next={next}
