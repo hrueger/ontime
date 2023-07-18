@@ -1,6 +1,7 @@
 import { generateId } from 'ontime-utils';
 import {
   Alias,
+  Departments,
   EndAction,
   EventData,
   OntimeRundown,
@@ -334,4 +335,15 @@ export const parseUserFields = (data): UserFields => {
     }
   }
   return { ...newUserFields };
+};
+
+export const parseDepartments = (data): Departments => {
+  const newDepartments: Departments = [...dbModel.departments];
+
+  if ('departments' in data) {
+    console.log('Found Departments definition, importing...');
+    // we will only be importing the fields we know, so look for that
+    return data.departments;
+  }
+  return newDepartments;
 };

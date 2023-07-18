@@ -9,6 +9,7 @@ import { dbModel } from '../models/dataModel.js';
 import { deleteFile, makeString, validateDuration } from './parserUtils.js';
 import {
   parseAliases,
+  parseDepartments,
   parseEventData,
   parseOsc,
   parseRundown,
@@ -281,6 +282,8 @@ export const parseJson = async (jsonData, enforce = false): Promise<DatabaseMode
   returnData.aliases = parseAliases(jsonData);
   // Import user fields if any
   returnData.userFields = parseUserFields(jsonData);
+  // Import departments if any
+  returnData.departments = parseDepartments(jsonData);
   // Import OSC settings if any
   // @ts-expect-error -- we are unable to type just yet
   returnData.osc = parseOsc(jsonData, enforce);
