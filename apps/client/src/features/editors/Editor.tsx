@@ -71,7 +71,6 @@ export default function Editor() {
         <MessageControl />
         <TimerControl />
         <Info />
-        <Timeline />
       </div>
       <EventEditor />
     </>
