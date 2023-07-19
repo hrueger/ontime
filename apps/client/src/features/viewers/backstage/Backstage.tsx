@@ -60,7 +60,7 @@ export default function Backstage(props: BackstageProps) {
     setBlinkClass(false);
     setTimeout(() => {
       setBlinkClass(true);
-    }, 100);
+    }, 10);
   }, [selectedId]);
 
   // defer rendering until we load stylesheets

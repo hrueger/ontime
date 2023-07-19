@@ -157,13 +157,11 @@
     
 
 @keyframes blink {
-  30% {
+  0% {
     background-color: var(--card-background-color-override, $viewer-card-bg-color);
-  }
-  50% {
     background-color: rgb(130, 130, 0);
   }
-  70% {
+  20% {
     background-color: var(--card-background-color-override, $viewer-card-bg-color);
   }
 }
